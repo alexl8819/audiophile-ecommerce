@@ -19,6 +19,12 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+.prettierignore
+__MACOSX
 
 # jetbrains setting folder
 .idea/
+
+# figma
+*.sketch
+*.fig

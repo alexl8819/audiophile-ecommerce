@@ -1,11 +1,82 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import { Link } from 'react-aria-components';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header';
+import Footer from '../components/Footer.astro';
+import { CategoryProductCard } from '../components/Card';
+
+import zxNineSpeaker from '../assets/home/mobile/image-speaker-zx9.png';
+import yxOneEarphones from '../assets/home/mobile/image-earphones-yx1.jpg';
 ---
 
 <Layout>
-	<Welcome />
+	<Header client:load />
+	<main class="container mb-8">
+		<section class="text-white bg-home-mobile-header bg-no-repeat bg-cover bg-center pt-8 pb-10 mb-4">
+			<div class="flex flex-col justify-center items-center text-center py-2 px-6">
+				<p class="text-[14px] tracking-[10px] uppercase mt-16 mb-[8px] opacity-50">New product</p>
+  				<h2 class="font-bold text-[36px] leading-[40px] tracking-[1.29px] mt-[8px] mb-[12px]">XX99 Mark II Headphones</h2>
+  				<p class="text-[15px] leading-[25px] tracking-normal mt-[12px] mb-[14px] opacity-75">Experience natural, lifelike audio and exceptional build quality made for the passionate music enthusiast.</p>
+  			
+				<Link href="/headphones/XX99-Mark-II" className='bg-dim-orange text-white font-bold text-[13px] tracking-[1px] uppercase w-[160px] mt-[14px] py-3 rounded-sm'>See product</Link>
+			</div>
+		</section>
+		<section class="my-20">
+			<ol class="list-none flex flex-col space-y-16">
+				<li class="mx-6">
+					<CategoryProductCard category='headphones' url='/headphones' client:visible />
+				</li>
+				<li class="mx-6">
+					<CategoryProductCard category='speakers' url='/speakers' client:visible />
+				</li>
+				<li class="mx-6">
+					<CategoryProductCard category='earphones' url='/earphones' client:visible />
+				</li>
+			</ol>
+		</section>
+		<section class="bg-dim-orange rounded-lg h-[600px] text-center text-white py-8 mx-6">
+			<div class="bg-circle-pattern bg-cover bg-top bg-no-repeat h-full">
+				<figure class="flex flex-col justify-center items-center mx-16">
+					<Image class="w-[172px] h-auto" src={zxNineSpeaker} alt="ZX9 Speaker" loading='lazy' />
+					<figcaption class="font-bold uppercase text-[36px] leading-[40px] mt-8">ZX9 Speaker</figcaption>
+				</figure>
+				<p class="mt-4 mb-8 mx-6 font-medium text-[15px] leading-[25px] opacity-75">Upgrade to premium speakers that are phenomenally built to deliver truly remarkable sound.</p>
+	
+				<Link href="/speakers/zx9-speaker" className="bg-black py-3 px-8 font-bold uppercase text-[13px]">See product</Link>
+			</div>
+		</section>
+		<section class="bg-light-gray h-[320px] text-left text-black my-6 mx-6">
+			<div class="bg-home-mobile-zx7-speaker bg-contain bg-no-repeat h-full rounded-lg">
+				<div class="py-24 px-8">
+					<h3 class="font-bold uppercase text-[28px] tracking-[2px] mb-12">ZX7 Speaker</h3>
+					<Link 
+						href="/speakers/zx7-speaker" 
+						className="mt-12 bg-transparent py-3 px-8 font-bold uppercase text-[13px] border border-black">
+						See product
+					</Link>
+				</div>
+			</div>
+		</section>
+		<section class="bg-light-gray h-[424px] text-black mx-6">
+			<figure>
+				<Image class="rounded-lg" src={yxOneEarphones} alt="photo of YX1 Earphones" loading="lazy" />
+				<figcaption class="font-bold uppercase text-[28px] tracking-[2px] mt-12 mb-8 px-6">YX1 Earphones</figcaption>
+			</figure>
+			<div class="px-6">
+				<Link 
+					href="/speakers/yx1-earphones" 
+					className="mt-8 bg-transparent py-3 px-8 font-bold uppercase text-[13px] border border-black">
+					See product
+				</Link>
+			</div>
+		</section>
+	</main>
+	<Footer navLinks={[
+		{ name: 'Home', url: '/' }, 
+		{ name: 'Headphones', url: '/headphones' }, 
+		{ name: 'Speakers', url: '/speakers' }, 
+		{ name: 'Earphones', url: '/earphones' }
+	]} />
 </Layout>
