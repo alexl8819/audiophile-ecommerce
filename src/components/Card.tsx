@@ -42,3 +42,63 @@ export const CategoryProductCard: FC<CategoryProductCardProps> = ({ category, ur
         </div>
     );
 }
+
+interface ProductCardPreviewProps {
+    name: string
+    description: string
+    category: string
+    productId: string
+}
+
+export const ProductCardPreview: FC<ProductCardPreviewProps> = ({ name, description, category, productId }) => {
+    const [mobileThumbnail, setMobileThumbnail] = useState<string | null>(null);
+    const [tabletThumbnail, setTabletThumbnail] = useState<string | null>(null);
+    const [desktopThumbnail, setDesktopThumbnail] = useState<string | null>(null);
+
+    const loadThumbnail = async (viewportModifier: string) => {
+        let loadedThumbnail = null;
+
+        try {
+            loadedThumbnail = await import(`../assets/product-${productId}/${viewportModifier}/image-category-page-preview.jpg`);
+        } catch (err) {
+            console.error(err);
+        }
+
+        if (viewportModifier === 'mobile') {
+            setMobileThumbnail(loadedThumbnail.default.src);
+        } else if (viewportModifier === 'tablet') {
+            setTabletThumbnail(loadedThumbnail.default.src);
+        } else {
+            setDesktopThumbnail(loadedThumbnail.default.src);
+        }
+    }
+
+    useEffect(() => {
+        loadThumbnail('mobile');
+        loadThumbnail('tablet');
+        loadThumbnail('desktop');
+    }, []);
+
+    return (
+        <div className='text-center'>
+            {
+                mobileThumbnail && tabletThumbnail && desktopThumbnail ? 
+                (
+                    <figure className='bg-light-gray flex flex-col justify-center items-center mb-6'>
+                        <picture>
+                            <source srcSet={mobileThumbnail} media="(max-width: 767px)" />
+                            <source srcSet={tabletThumbnail} media="(max-width: 1023px)" />
+                            <source srcSet={desktopThumbnail} media="(min-width: 1280px)" />
+                            <img className='w-[327px] h-auto' src={mobileThumbnail} alt={`${name} product preview`} loading='lazy' />
+                        </picture>
+			        </figure>
+                ) : null
+            }
+			<p className='uppercase text-dim-orange text-[14px] tracking-[10px] my-3'>New product</p>
+			<h2 className='font-bold uppercase text-[28px] tracking-[1px] my-3'>{ name }</h2>
+            <p className='font-medium text-[15px] leading-[25px] opacity-50 mt-3 mb-8'>{ description }</p>
+	
+			<Link href={`/${category}/${productId}`} className="bg-dim-orange text-white py-3 px-8 font-bold uppercase text-[13px]">See product</Link>
+        </div>
+    );
+}

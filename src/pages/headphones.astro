@@ -1,0 +1,63 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header';
+import Footer from '../components/Footer.astro';
+import { CategoryProductCard, ProductCardPreview } from '../components/Card';
+---
+
+<Layout subtitle="Headphones">
+	<Header client:load />
+	<main class="container mb-8">
+		<section class="text-white bg-black py-8 mb-4">
+			<div class="flex flex-col justify-center items-center text-center px-6">
+  				<h1 class="font-bold uppercase text-[36px] leading-[40px] tracking-[1.29px] mt-[8px] mb-[12px]">Headphones</h1>
+			</div>
+		</section>
+		<section class="my-12 mx-6">
+			<ProductCardPreview 
+				name="XX99 Mark II Headphones"
+				description="The new XX99 Mark II headphones is the pinnacle of pristine audio. It redefines your premium headphone experience by reproducing the balanced depth and precision of studio-quality sound."
+				productId="xx99-mark-two-headphones"
+				category="headphones" 
+				client:visible 
+			/>
+		</section>
+		<section class="my-12 mx-6">
+			<ProductCardPreview 
+				name="XX99 Mark I Headphones"
+				description="As the gold standard for headphones, the classic XX99 Mark I offers detailed and accurate audio reproduction for audiophiles, mixing engineers, and music aficionados alike in studios and on the go."
+				productId="xx99-mark-one-headphones"
+				category="headphones" 
+				client:visible 
+			/>
+		</section>
+		<section class="my-12 mx-6">
+			<ProductCardPreview 
+				name="XX59 Headphones"
+				description="Enjoy your audio almost anywhere and customize it to your specific tastes with the XX59 headphones. The stylish yet durable versatile wireless headset is a brilliant companion at home or on the move."
+				productId="xx59-headphones"
+				category="headphones" 
+				client:visible 
+			/>
+		</section>
+		<section class="my-20">
+			<ol class="list-none flex flex-col space-y-16">
+				<li class="mx-6">
+					<CategoryProductCard category='headphones' url='/headphones' client:visible />
+				</li>
+				<li class="mx-6">
+					<CategoryProductCard category='speakers' url='/speakers' client:visible />
+				</li>
+				<li class="mx-6">
+					<CategoryProductCard category='earphones' url='/earphones' client:visible />
+				</li>
+			</ol>
+		</section>
+	</main>
+	<Footer navLinks={[
+		{ name: 'Home', url: '/' }, 
+		{ name: 'Headphones', url: '/headphones' }, 
+		{ name: 'Speakers', url: '/speakers' }, 
+		{ name: 'Earphones', url: '/earphones' }
+	]} />
+</Layout>
