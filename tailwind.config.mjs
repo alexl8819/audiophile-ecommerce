@@ -12,7 +12,9 @@ export default {
 			},
 			'backgroundImage': {
 				'home-mobile-header': 'url(/image-header.jpg)',
-				'home-mobile-zx7-speaker': 'url(/image-speaker-zx7.jpg)',
+				'home-mobile-zx7-speaker': 'url(/mobile/image-speaker-zx7.jpg)',
+				'home-tablet-zx7-speaker': 'url(/tablet/image-speaker-zx7.jpg)',
+				'home-desktop-zx7-speaker': 'url(/desktop/image-speaker-zx7.jpg)',
 				'circle-pattern': 'url(/pattern-circles.svg)'
 			}
 		},
