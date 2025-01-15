@@ -88,7 +88,7 @@ export const ProductCardPreview: FC<ProductCardPreviewProps> = ({ name, descript
                         <picture>
                             <source srcSet={mobileThumbnail} media="(max-width: 767px)" />
                             <source srcSet={tabletThumbnail} media="(max-width: 1023px)" />
-                            <source srcSet={desktopThumbnail} media="(min-width: 1280px)" />
+                            <source srcSet={desktopThumbnail} media="(min-width: 1024px)" />
                             <img className='w-[327px] h-auto' src={mobileThumbnail} alt={`${name} product preview`} loading='lazy' />
                         </picture>
 			        </figure>
