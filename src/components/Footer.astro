@@ -5,6 +5,7 @@ import { Link } from 'react-aria-components';
 import logo from '../assets/shared/desktop/logo.svg';
 import bestGearMobile from '../assets/shared/mobile/image-best-gear.jpg';
 import bestGearTablet from '../assets/shared/tablet/image-best-gear.jpg';
+import bestGearDeskop from '../assets/shared/desktop/image-best-gear.jpg';
 
 import iconFacebook from '../assets/shared/desktop/icon-facebook.svg';
 import iconInstagram from '../assets/shared/desktop/icon-instagram.svg';
@@ -21,7 +22,12 @@ const { navLinks } = Astro.props;
     <section class="flex flex-col justify-center items-center text-black bg-white">
         <div class="mx-6 mb-[120px]">
             <figure class="h-[300px] overflow-hidden mb-[20px]">
-                <Image src={bestGearMobile} class="object-center object-cover aspect-square w-full h-full rounded-md" alt="man with headphones" loading="lazy" /> 
+                <picture>
+                    <source srcset={bestGearMobile.src} media="(max-width: 767px)">
+                    <source srcset={bestGearTablet.src} media="(max-width: 1023px)">
+                    <source srcset={bestGearDeskop.src} media="(min-width: 1024px)">
+                    <Image src={bestGearMobile} class="object-center object-cover aspect-square w-full h-full rounded-md" alt="man with headphones" loading="lazy" /> 
+                </picture>
             </figure>
             <h2 class="font-bold uppercase text-center text-[28px] tracking-[1px] mt-[20px] mb-[16px]">Bringing you the best <span class="text-dim-orange">audio</span> gear</h2>
             <p class="font-medium text-center text-[15px] leading-[25px] opacity-50 mt-[16px]">
