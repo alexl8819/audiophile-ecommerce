@@ -1,0 +1,72 @@
+---
+export const prerender = false;
+
+import { Link } from 'react-aria-components';
+import { db, Products, eq, isDbError } from 'astro:db';
+
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer.astro';
+import { CategoryProductCard, DetailedProductCard } from '../../components/Card';
+import { type Product, type Item } from '../../lib/constants';
+
+const { productId } = Astro.params;
+
+let products;
+
+try {
+    products = await db.select().from(Products).where(eq(Products.slug, productId));
+} catch (err) {
+    if (isDbError(err)) {
+        console.info('LibSQL related error');
+    }
+    console.error(err);
+    return new Response('An unexpected error occurred', { status: 500 });
+}
+
+if (!products || !products.length) {
+    return Astro.redirect('/404');
+}
+
+const selectedProduct = (products[0] as Product);
+---
+
+<Layout subtitle={selectedProduct.name}>
+	<Header client:load />
+	<main class="container mb-8">
+		<Link href="/">Back</Link>
+		<section class="my-12 mx-6">
+            <DetailedProductCard
+                name={selectedProduct.name}
+                description={selectedProduct.description}
+                features={selectedProduct.features}
+                category={selectedProduct.category}
+                productId={selectedProduct.slug}
+                isNew={selectedProduct.new}
+                price={selectedProduct.price}
+                includes={selectedProduct.included as Array<Item>}
+                availableQuantity={1}
+                client:visible         
+            />
+		</section>
+		<section class="my-20">
+			<ol class="list-none flex flex-col space-y-16">
+				<li class="mx-6">
+					<CategoryProductCard category='headphones' url='/headphones' client:visible />
+				</li>
+				<li class="mx-6">
+					<CategoryProductCard category='speakers' url='/speakers' client:visible />
+				</li>
+				<li class="mx-6">
+					<CategoryProductCard category='earphones' url='/earphones' client:visible />
+				</li>
+			</ol>
+		</section>
+	</main>
+	<Footer navLinks={[
+		{ name: 'Home', url: '/' }, 
+		{ name: 'Headphones', url: '/headphones' }, 
+		{ name: 'Speakers', url: '/speakers' }, 
+		{ name: 'Earphones', url: '/earphones' }
+	]} />
+</Layout>

@@ -17,5 +17,15 @@ const { subtitle } = Astro.props;
 	</body>
 </html>
 
-<style>
+<style is:global>
+	/* Remove increment/decrement arrows */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
 </style>
