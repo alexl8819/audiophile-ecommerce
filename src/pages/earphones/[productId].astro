@@ -7,7 +7,7 @@ import { db, Products, eq, isDbError } from 'astro:db';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer.astro';
-import { CategoryProductCard, DetailedProductCard } from '../../components/Card';
+import { CategoryProductCard, ProductCard } from '../../components/Card';
 import { type Product, type Item } from '../../lib/constants';
 
 const { productId } = Astro.params;
@@ -36,7 +36,8 @@ const selectedProduct = (products[0] as Product);
 	<main class="container mb-8">
 		<Link href="/">Back</Link>
 		<section class="my-12 mx-6">
-            <DetailedProductCard
+            <ProductCard
+                isPreview={false}
                 name={selectedProduct.name}
                 description={selectedProduct.description}
                 features={selectedProduct.features}

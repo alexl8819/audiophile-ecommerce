@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header';
 import Footer from '../components/Footer.astro';
-import { CategoryProductCard, ProductCardPreview } from '../components/Card';
+import { CategoryProductCard, ProductCard } from '../components/Card';
 ---
 
 <Layout subtitle="Earphones">
@@ -14,7 +14,8 @@ import { CategoryProductCard, ProductCardPreview } from '../components/Card';
 			</div>
 		</section>
 		<section class="my-12 mx-6">
-			<ProductCardPreview 
+			<ProductCard
+				isPreview={true} 
 				name="YX1 wireless earphones"
 				description="Tailor your listening experience with bespoke dynamic drivers from the new YX1 Wireless Earphones. Enjoy incredible high-fidelity sound even in noisy environments with its active noise cancellation feature."
 				productId="yx1-earphones"
