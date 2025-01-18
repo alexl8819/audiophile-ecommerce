@@ -58,12 +58,6 @@ const Products = defineTable({
     on: ['id'],
     unique: true
   }]
-  /*foreignKeys: [
-    {
-      columns: ['id'],
-      references: [Inventory.columns.product]
-    }
-  ]*/
 });
 
 const Inventory = defineTable({
