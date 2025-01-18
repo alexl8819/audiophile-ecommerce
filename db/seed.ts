@@ -1,4 +1,4 @@
-import { db, Products, Inventory, Discounts } from 'astro:db';
+import { db, Products, Inventory, Discounts, Recommendations } from 'astro:db';
 
 // https://astro.build/db/seed
 export default async function seed() {
@@ -152,7 +152,7 @@ export default async function seed() {
 		slug: "zx7-speaker",
 		description: "Stream high quality sound wirelessly with minimal to no loss. The ZX7 speaker uses high-end audiophile components that represents the top of the line powered speakers for home or studio use.",
     	features: "Reap the advantages of a flat diaphragm tweeter cone. This provides a fast response rate and excellent high frequencies that lower tiered bookshelf speakers cannot provide. The woofers are made from aluminum that produces a unique and clear sound. XLR inputs allow you to connect to a mixer for more advanced usage.\n\nThe ZX7 speaker is the perfect blend of stylish design and high performance. It houses an encased MDF wooden enclosure which minimises acoustic resonance. Dual connectivity allows pairing through bluetooth or traditional optical and RCA input. Switch input sources and control volume at your finger tips with the included wireless remote. This versatile speaker is equipped to deliver an authentic listening experience.",
-		category: "Speakers",
+		category: "speakers",
 		images: 3,
 		price: 3500,
 		included: [
@@ -189,7 +189,7 @@ export default async function seed() {
 		slug: "zx9-speaker",
 		description: "Upgrade your sound system with the all new ZX9 active speaker. It’s a bookshelf speaker system that offers truly wireless connectivity -- creating new possibilities for more pleasing and practical audio setups.",
     	features: "Connect via Bluetooth or nearly any wired source. This speaker features optical, digital coaxial, USB Type-B, stereo RCA, and stereo XLR inputs, allowing you to have up to five wired source devices connected for easy switching. Improved bluetooth technology offers near lossless audio quality at up to 328ft (100m).\n\nDiscover clear, more natural sounding highs than the competition with ZX9’s signature planar diaphragm tweeter. Equally important is its powerful room-shaking bass courtesy of a 6.5” aluminum alloy bass unit. You’ll be able to enjoy equal sound quality whether in a large room or small den. Furthermore, you will experience new sensations from old songs since it can respond to even the subtle waveforms.",
-		category: "Speakers",
+		category: "speakers",
 		images: 3,
 		new: true,
 		price: 4500,
@@ -219,6 +219,96 @@ export default async function seed() {
 
 	await db.insert(Inventory).values({
 		product: 6
+	});
+
+	await db.insert(Recommendations).values({
+		product: 1,
+		similar: 3
+	});
+
+	await db.insert(Recommendations).values({
+		product: 1,
+		similar: 2 
+	});
+
+	await db.insert(Recommendations).values({
+		product: 1,
+		similar: 6
+	});
+
+	await db.insert(Recommendations).values({
+		product: 2,
+		similar: 4
+	});
+
+	await db.insert(Recommendations).values({
+		product: 2,
+		similar: 3
+	});
+
+	await db.insert(Recommendations).values({
+		product: 2,
+		similar: 6
+	});
+
+	await db.insert(Recommendations).values({
+		product: 3,
+		similar: 4
+	});
+
+	await db.insert(Recommendations).values({
+		product: 3,
+		similar: 2
+	});
+
+	await db.insert(Recommendations).values({
+		product: 3,
+		similar: 6
+	});
+
+	await db.insert(Recommendations).values({
+		product: 4,
+		similar: 3
+	});
+
+	await db.insert(Recommendations).values({
+		product: 4,
+		similar: 2
+	});
+
+	await db.insert(Recommendations).values({
+		product: 4,
+		similar: 6
+	});
+
+	await db.insert(Recommendations).values({
+		product: 5,
+		similar: 6
+	});
+
+	await db.insert(Recommendations).values({
+		product: 5,
+		similar: 3
+	});
+
+	await db.insert(Recommendations).values({
+		product: 5,
+		similar: 2
+	});
+
+	await db.insert(Recommendations).values({
+		product: 6,
+		similar: 5
+	});
+
+	await db.insert(Recommendations).values({
+		product: 6,
+		similar: 3
+	});
+
+	await db.insert(Recommendations).values({
+		product: 6,
+		similar: 2
 	});
 
 	await db.insert(Discounts).values({

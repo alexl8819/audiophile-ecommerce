@@ -53,7 +53,17 @@ const Products = defineTable({
     price: column.number(),
     included: column.json(),
     images: column.number()
-  }
+  },
+  indexes: [{
+    on: ['id'],
+    unique: true
+  }]
+  /*foreignKeys: [
+    {
+      columns: ['id'],
+      references: [Inventory.columns.product]
+    }
+  ]*/
 });
 
 const Inventory = defineTable({
@@ -92,6 +102,18 @@ const Carts = defineTable({
   }
 });
 
+const Recommendations = defineTable({
+  columns: {
+    id: column.number({
+      primaryKey: true
+    }),
+    product: column.number({
+      references: () => Products.columns.id
+    }),
+    similar: column.number()
+  }
+});
+
 // https://astro.build/db/config
 export default defineDb({
   tables: {
@@ -100,6 +122,7 @@ export default defineDb({
     Products,
     Inventory,
     Discounts,
-    Carts
+    Carts,
+    Recommendations
   }
 });
