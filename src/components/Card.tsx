@@ -4,6 +4,7 @@ import { Button, Input, Link, NumberField, Label, Group } from 'react-aria-compo
 import iconArrowRight from '../assets/shared/desktop/icon-arrow-right.svg';
 import { type Item } from '../lib/constants';
 import { formatCurrency } from '../lib/common';
+import { type ShowcaseStyling, ProductShowcase } from './Gallery';
 
 interface CategoryProductCardProps {
     category: string
@@ -54,17 +55,15 @@ interface ProductCardProps {
     features?: string
     isNew?: boolean
     price?: number
+    galleryImages?: number
     availableQuantity?: number
     includes?: Array<Item>
 }
 
 export const ProductCard: FC<ProductCardProps> = ({ 
-    name, description, category, isPreview, features, productId, isNew, price, availableQuantity, includes
+    name, description, category, isPreview, features, productId, 
+    isNew, price, galleryImages, availableQuantity, includes
 }) => {
-    const [mobileThumbnail, setMobileThumbnail] = useState<string | null>(null);
-    const [tabletThumbnail, setTabletThumbnail] = useState<string | null>(null);
-    const [desktopThumbnail, setDesktopThumbnail] = useState<string | null>(null);
-
     // Temporary
     const [quantitySelected, setQuantitySelected] = useState<number>(1);
 
@@ -76,48 +75,10 @@ export const ProductCard: FC<ProductCardProps> = ({
         setQuantitySelected(quantity);
     };
 
-    const loadThumbnail = async (viewportModifier: string) => {
-        let loadedThumbnail = null;
-
-        try {
-            loadedThumbnail = await import(
-                `../assets/product-${productId}/${viewportModifier}/image-${isPreview ? 'category-page-preview' : 'product'}.jpg`
-            );
-        } catch (err) {
-            console.error(err);
-        }
-
-        if (viewportModifier === 'mobile') {
-            setMobileThumbnail(loadedThumbnail.default.src);
-        } else if (viewportModifier === 'tablet') {
-            setTabletThumbnail(loadedThumbnail.default.src);
-        } else {
-            setDesktopThumbnail(loadedThumbnail.default.src);
-        }
-    }
-
-    useEffect(() => {
-        loadThumbnail('mobile');
-        loadThumbnail('tablet');
-        loadThumbnail('desktop');
-    }, []);
-
     return (
         <div className={!isPreview ? 'text-left' : 'text-center'}>
             <section className={!isPreview ? 'mb-11' : ''}>
-                {
-                    mobileThumbnail && tabletThumbnail && desktopThumbnail ? 
-                    (
-                        <figure className='bg-light-gray flex flex-col justify-center items-center mb-6'>
-                            <picture>
-                                <source srcSet={mobileThumbnail} media="(max-width: 767px)" />
-                                <source srcSet={tabletThumbnail} media="(max-width: 1023px)" />
-                                <source srcSet={desktopThumbnail} media="(min-width: 1024px)" />
-                                <img className='w-[327px] h-auto' src={mobileThumbnail} alt={`${name} product preview`} loading='lazy' />
-                            </picture>
-			            </figure>
-                    ) : null
-                }
+                <ProductShowcase name={name} productId={productId} target={`image-${isPreview ? 'category-page-preview' : 'product'}`} />
                 {
                     isNew && !isPreview ? (
                         <p className='uppercase text-dim-orange text-[14px] tracking-[10px] my-3'>New product</p>
@@ -188,10 +149,37 @@ export const ProductCard: FC<ProductCardProps> = ({
                             }
                             </ol>
                         </section>
-                        <section className='mt-[88px]'></section>
+                        <section className='mt-[88px]'>
+                            <ol className='list-none'>
+                                {
+                                    Array.from({length: galleryImages || 3 }).map((_, index: number) => (
+                                        <li key={index}>
+                                            <ProductShowcase
+                                                name={name} 
+                                                productId={productId} 
+                                                target={`image-gallery-${(index + 1)}`} 
+                                                styles={{ roundedEdges: true } as ShowcaseStyling}
+                                            />
+                                        </li>
+                                    ))
+                                }
+                            </ol>
+                        </section>
                     </>
                 ) : null
             }
         </div>
+    );
+}
+
+interface RecommendationCardProps {
+    slug: string
+    name: string
+    preview: string
+}
+
+export const RecommendationCard: FC<RecommendationCardProps> = ({ slug, name, preview }) => {
+    return (
+        <></>
     );
 }

@@ -52,6 +52,7 @@ const Products = defineTable({
     }),
     price: column.number(),
     included: column.json(),
+    images: column.number()
   }
 });
 

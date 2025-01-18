@@ -43,6 +43,7 @@ const selectedProduct = (products[0] as Product);
                 features={selectedProduct.features}
                 category={selectedProduct.category}
                 productId={selectedProduct.slug}
+                galleryImages={selectedProduct.images}
                 isNew={selectedProduct.new}
                 price={selectedProduct.price}
                 includes={selectedProduct.included as Array<Item>}

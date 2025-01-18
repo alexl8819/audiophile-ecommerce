@@ -11,6 +11,7 @@ export interface Product {
     description: string
     features: string
     category: string
+    images: number
     new: boolean
     price: number
     included: string | Array<Item>
