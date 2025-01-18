@@ -188,7 +188,7 @@ export const RecommendedProductCard: FC<RecommendedProductCardProps> = ({ recomm
                             <h3 className='truncate font-bold uppercase text-[24px] tracking-[1.71px] mb-8'>{ product.name }</h3>
                             <Link
                                 className='bg-dim-orange text-white py-3 px-8 uppercase font-bold text-[13px] tracking-[1px]'
-                                href={`/${product.slug}`}
+                                href={`/${product.category}/${product.slug}`}
                             >
                                 See product
                             </Link>

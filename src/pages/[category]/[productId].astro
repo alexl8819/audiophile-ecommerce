@@ -2,21 +2,22 @@
 export const prerender = false;
 
 import { Link } from 'react-aria-components';
-import { db, sql, Products, Recommendations, isDbError } from 'astro:db';
+import { db, sql, isDbError } from 'astro:db';
 
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer.astro';
 import { CategoryProductCard, ProductCard, RecommendedProductCard } from '../../components/Card';
-import { type Product, type Item } from '../../lib/constants';
+import { type Product, type Item, type RecommendedProduct } from '../../lib/constants';
 
 const { category, productId } = Astro.params;
 
 let products;
 
+// TODO: cache
 // TODO: use proper drizzle-orm query
 const statement = sql`
-	SELECT p1.*, '[' || GROUP_CONCAT('{"name":\"' || p2.name || '\","slug":\"' || p2.slug || '\"}' || '') || ']' AS recommendations FROM Recommendations r JOIN Products p1 ON r.product = p1.id JOIN Products p2 ON r.similar = p2.id WHERE p1.slug = ${productId} AND p1.category = ${category} GROUP BY p1.id;
+	SELECT p1.*, '[' || GROUP_CONCAT(json_object('name', p2.name, 'slug', p2.slug, 'category', p2.category)) || ']' AS recommendations FROM Recommendations r JOIN Products p1 ON r.product = p1.id JOIN Products p2 ON r.similar = p2.id WHERE p1.slug = ${productId} AND p1.category = ${category} GROUP BY p1.id;
 `.mapWith(String);
 
 try {
@@ -62,7 +63,7 @@ selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as 
 		</section>
 		<section class="my-12 mx-6">
 			<RecommendedProductCard 
-				recommendations={selectedProduct.recommendations as Recommendations}
+				recommendations={selectedProduct.recommendations as Array<RecommendedProduct>}
 				client:visible
 			/>
 		</section>

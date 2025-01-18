@@ -6,6 +6,7 @@ export interface Item {
 export interface RecommendedProduct {
     name: string
     slug: string
+    category: string
 }
 
 export interface Product {
