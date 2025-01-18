@@ -6,12 +6,12 @@ export interface ShowcaseStyling {
 
 interface ProductShowcaseProps {
     name: string
-    productId: string
+    path: string
     target: string
     styles?: ShowcaseStyling
 }
 
-export const ProductShowcase: FC<ProductShowcaseProps> = ({ name, productId, target, styles }) => {
+export const ProductShowcase: FC<ProductShowcaseProps> = ({ name, path, target, styles }) => {
     const [mobileThumbnail, setMobileThumbnail] = useState<string | null>(null);
     const [tabletThumbnail, setTabletThumbnail] = useState<string | null>(null);
     const [desktopThumbnail, setDesktopThumbnail] = useState<string | null>(null);
@@ -20,7 +20,7 @@ export const ProductShowcase: FC<ProductShowcaseProps> = ({ name, productId, tar
         let loadedThumbnail = null;
 
         try {
-            loadedThumbnail = await import(`../assets/product-${productId}/${viewportModifier}/${target}.jpg`);
+            loadedThumbnail = await import(`../assets/${path}/${viewportModifier}/${target}.jpg`);
         } catch (err) {
             console.error(err);
         }

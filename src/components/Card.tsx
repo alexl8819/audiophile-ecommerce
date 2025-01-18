@@ -2,7 +2,7 @@ import { type FC, useState, useEffect } from 'react';
 import { Button, Input, Link, NumberField, Label, Group } from 'react-aria-components';
 
 import iconArrowRight from '../assets/shared/desktop/icon-arrow-right.svg';
-import { type Item } from '../lib/constants';
+import { type Item, type RecommendedProduct } from '../lib/constants';
 import { formatCurrency } from '../lib/common';
 import { type ShowcaseStyling, ProductShowcase } from './Gallery';
 
@@ -78,7 +78,7 @@ export const ProductCard: FC<ProductCardProps> = ({
     return (
         <div className={!isPreview ? 'text-left' : 'text-center'}>
             <section className={!isPreview ? 'mb-11' : ''}>
-                <ProductShowcase name={name} productId={productId} target={`image-${isPreview ? 'category-page-preview' : 'product'}`} />
+                <ProductShowcase name={name} path={`product-${productId}`} target={`image-${isPreview ? 'category-page-preview' : 'product'}`} />
                 {
                     isNew && !isPreview ? (
                         <p className='uppercase text-dim-orange text-[14px] tracking-[10px] my-3'>New product</p>
@@ -156,7 +156,7 @@ export const ProductCard: FC<ProductCardProps> = ({
                                         <li key={index}>
                                             <ProductShowcase
                                                 name={name} 
-                                                productId={productId} 
+                                                path={`product-${productId}`} 
                                                 target={`image-gallery-${(index + 1)}`} 
                                                 styles={{ roundedEdges: true } as ShowcaseStyling}
                                             />
@@ -172,14 +172,30 @@ export const ProductCard: FC<ProductCardProps> = ({
     );
 }
 
-interface RecommendationCardProps {
-    slug: string
-    name: string
-    preview: string
+interface RecommendedProductCardProps {
+    recommendations: Array<RecommendedProduct>
 }
 
-export const RecommendationCard: FC<RecommendationCardProps> = ({ slug, name, preview }) => {
+export const RecommendedProductCard: FC<RecommendedProductCardProps> = ({ recommendations }) => {
     return (
-        <></>
+        <section className='text-center'>
+            <h2 className='uppercase font-bold text-[24px] leading-[36px] tracking-[0.86px]'>You may also like</h2>
+            <ol className='list-none'>
+                {
+                    recommendations.map((product: RecommendedProduct, index: number) => (
+                        <li key={index} className='my-16'>
+                            <ProductShowcase name={product.name} path='shared' target={`image-${product.slug}`} />
+                            <h3 className='truncate font-bold uppercase text-[24px] tracking-[1.71px] mb-8'>{ product.name }</h3>
+                            <Link
+                                className='bg-dim-orange text-white py-3 px-8 uppercase font-bold text-[13px] tracking-[1px]'
+                                href={`/${product.slug}`}
+                            >
+                                See product
+                            </Link>
+                        </li>
+                    ))
+                }
+            </ol>
+        </section>
     );
 }

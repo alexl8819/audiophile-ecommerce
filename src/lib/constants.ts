@@ -3,9 +3,14 @@ export interface Item {
     item: string
 }
 
+export interface RecommendedProduct {
+    name: string
+    slug: string
+}
+
 export interface Product {
     id: number
-    created: string
+    created?: string
     name: string
     slug: string
     description: string
@@ -15,4 +20,5 @@ export interface Product {
     new: boolean
     price: number
     included: string | Array<Item>
+    recommendations: string | Array<RecommendedProduct>
 }

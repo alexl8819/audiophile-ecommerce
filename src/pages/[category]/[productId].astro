@@ -2,20 +2,25 @@
 export const prerender = false;
 
 import { Link } from 'react-aria-components';
-import { db, Products, eq, isDbError } from 'astro:db';
+import { db, sql, Products, Recommendations, isDbError } from 'astro:db';
 
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer.astro';
-import { CategoryProductCard, ProductCard } from '../../components/Card';
+import { CategoryProductCard, ProductCard, RecommendedProductCard } from '../../components/Card';
 import { type Product, type Item } from '../../lib/constants';
 
-const { productId } = Astro.params;
+const { category, productId } = Astro.params;
 
 let products;
 
+// TODO: use proper drizzle-orm query
+const statement = sql`
+	SELECT p1.*, '[' || GROUP_CONCAT('{"name":\"' || p2.name || '\","slug":\"' || p2.slug || '\"}' || '') || ']' AS recommendations FROM Recommendations r JOIN Products p1 ON r.product = p1.id JOIN Products p2 ON r.similar = p2.id WHERE p1.slug = ${productId} AND p1.category = ${category} GROUP BY p1.id;
+`.mapWith(String);
+
 try {
-    products = await db.select().from(Products).where(eq(Products.slug, productId));
+    products = await db.all(statement);
 } catch (err) {
     if (isDbError(err)) {
         console.info('LibSQL related error');
@@ -29,12 +34,16 @@ if (!products || !products.length) {
 }
 
 const selectedProduct = (products[0] as Product);
+selectedProduct.included = JSON.parse(selectedProduct.included as string);
+selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as string);
 ---
 
 <Layout subtitle={selectedProduct.name}>
 	<Header client:load />
-	<main class="container mb-8">
-		<Link href="/">Back</Link>
+	<main class="container py-2 mb-8">
+		<div class="mx-6">
+			<Link href={`/${category}`}>Back</Link>
+		</div>
 		<section class="my-12 mx-6">
             <ProductCard
                 isPreview={false}
@@ -50,6 +59,12 @@ const selectedProduct = (products[0] as Product);
                 availableQuantity={1}
                 client:visible         
             />
+		</section>
+		<section class="my-12 mx-6">
+			<RecommendedProductCard 
+				recommendations={selectedProduct.recommendations as Recommendations}
+				client:visible
+			/>
 		</section>
 		<section class="my-20">
 			<ol class="list-none flex flex-col space-y-16">
