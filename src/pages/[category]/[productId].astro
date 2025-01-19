@@ -17,7 +17,7 @@ let products;
 // TODO: cache
 // TODO: use proper drizzle-orm query
 const statement = sql`
-	SELECT p1.*, '[' || GROUP_CONCAT(json_object('name', p2.name, 'slug', p2.slug, 'category', p2.category)) || ']' AS recommendations FROM Recommendations r JOIN Products p1 ON r.product = p1.id JOIN Products p2 ON r.similar = p2.id WHERE p1.slug = ${productId} AND p1.category = ${category} GROUP BY p1.id;
+	SELECT p1.*, '[' || GROUP_CONCAT(json_object('name', p2.name, 'slug', p2.slug, 'category', p2.category)) || ']' AS recommendations, (SELECT COUNT(*) FROM inventory where inventory.product = p1.id) AS quantity FROM Recommendations r JOIN Products p1 ON r.product = p1.id JOIN Products p2 ON r.similar = p2.id WHERE p1.slug = ${productId} AND p1.category = ${category} GROUP BY p1.id;
 `.mapWith(String);
 
 try {
@@ -57,7 +57,7 @@ selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as 
                 isNew={selectedProduct.new}
                 price={selectedProduct.price}
                 includes={selectedProduct.included as Array<Item>}
-                availableQuantity={1}
+                availableQuantity={selectedProduct.quantity}
                 client:visible         
             />
 		</section>

@@ -68,10 +68,12 @@ export const ProductCard: FC<ProductCardProps> = ({
     const [quantitySelected, setQuantitySelected] = useState<number>(1);
 
     const changeQuantity = (quantity: number) => {
-        const available = availableQuantity || 0;
+        const available = availableQuantity || 1;
+
         if (quantity < 1 || quantity > available) {
             return;
         }
+        
         setQuantitySelected(quantity);
     };
 
@@ -104,21 +106,36 @@ export const ProductCard: FC<ProductCardProps> = ({
                                             type='button' 
                                             className='w-3'
                                             onPress={() => changeQuantity(quantitySelected - 1)}
+                                            isDisabled={availableQuantity === 0}
                                         >
                                             -
                                         </Button>
-                                        <Input type='number' value={quantitySelected} className='w-12 text-center' />
+                                        <Input
+                                            type='number' 
+                                            value={quantitySelected} 
+                                            className='w-12 text-center'
+                                            readOnly={availableQuantity === 0}
+                                        />
                                         <Button 
                                             slot='increment' 
                                             type='button' 
                                             className='w-3'
                                             onPress={() => changeQuantity(quantitySelected + 1)}
+                                            isDisabled={availableQuantity === 0}
                                         >
                                             +
                                         </Button>
                                     </Group>
                                 </NumberField>
-                                <Button type='button' className='bg-dim-orange text-white py-3 px-8 font-bold uppercase text-[13px] tracking-[1px]'>Add to Cart</Button>
+                                <Button 
+                                    type='button' 
+                                    className='bg-dim-orange text-white py-3 px-8 font-bold uppercase text-[13px] tracking-[1px]'
+                                    isDisabled={availableQuantity === 0}
+                                >
+                                    {
+                                        availableQuantity && availableQuantity <= 0? 'Out of Stock' : 'Add to Cart'
+                                    }
+                                </Button>
                             </div>
                         </>
                     ) : null

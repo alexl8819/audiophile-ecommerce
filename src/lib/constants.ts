@@ -20,6 +20,7 @@ export interface Product {
     images: number
     new: boolean
     price: number
+    quantity: number
     included: string | Array<Item>
     recommendations: string | Array<RecommendedProduct>
 }

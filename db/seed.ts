@@ -183,6 +183,10 @@ export default async function seed() {
 		product: 5
 	});
 
+	await db.insert(Inventory).values({
+		product: 5
+	});
+
 	await db.insert(Products).values({
 		id: 6,
 		name: "ZX9 Speaker",
