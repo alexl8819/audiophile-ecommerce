@@ -1,10 +1,11 @@
 import { type FC, useState, useEffect } from 'react';
-import { Button, Input, Link, NumberField, Label, Group } from 'react-aria-components';
+import { Button, Link } from 'react-aria-components';
 
 import iconArrowRight from '../assets/shared/desktop/icon-arrow-right.svg';
 import { type Item, type RecommendedProduct } from '../lib/constants';
 import { formatCurrency } from '../lib/common';
 import { type ShowcaseStyling, ProductShowcase } from './Gallery';
+import { QuantitySelectionButtonGroup } from './Button';
 
 interface CategoryProductCardProps {
     category: string
@@ -98,35 +99,13 @@ export const ProductCard: FC<ProductCardProps> = ({
                         <>
                             <p className='font-bold text-[18px] tracking-[1.29px]'>{ formatCurrency(price) }</p>
                             <div className='flex flex-row justify-evenly items-center my-3'>
-                                <NumberField className='bg-light-gray'>
-                                    <Label className='sr-only'>Quantity</Label>
-                                    <Group>
-                                        <Button 
-                                            slot='decrement' 
-                                            type='button' 
-                                            className='w-3'
-                                            onPress={() => changeQuantity(quantitySelected - 1)}
-                                            isDisabled={availableQuantity === 0}
-                                        >
-                                            -
-                                        </Button>
-                                        <Input
-                                            type='number' 
-                                            value={quantitySelected} 
-                                            className='w-12 text-center'
-                                            readOnly={availableQuantity === 0}
-                                        />
-                                        <Button 
-                                            slot='increment' 
-                                            type='button' 
-                                            className='w-3'
-                                            onPress={() => changeQuantity(quantitySelected + 1)}
-                                            isDisabled={availableQuantity === 0}
-                                        >
-                                            +
-                                        </Button>
-                                    </Group>
-                                </NumberField>
+                                <QuantitySelectionButtonGroup 
+                                    label='Quantity'
+                                    value={quantitySelected}
+                                    decrement={() => changeQuantity(quantitySelected - 1)}
+                                    increment={() => changeQuantity(quantitySelected + 1)}
+                                    isDisabled={availableQuantity === 0} 
+                                />
                                 <Button 
                                     type='button' 
                                     className='bg-dim-orange text-white py-3 px-8 font-bold uppercase text-[13px] tracking-[1px]'
