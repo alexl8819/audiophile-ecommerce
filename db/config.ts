@@ -86,7 +86,7 @@ const Discounts = defineTable({
   }
 });
 
-const Carts = defineTable({
+const Orders = defineTable({
   columns: {
     item: Inventory.columns.id,
     quantity: column.number(),
@@ -94,7 +94,7 @@ const Carts = defineTable({
       references: () => Customers.columns.id
     })
   }
-});
+})
 
 const Recommendations = defineTable({
   columns: {
@@ -116,7 +116,7 @@ export default defineDb({
     Products,
     Inventory,
     Discounts,
-    Carts,
+    Orders,
     Recommendations
   }
 });
