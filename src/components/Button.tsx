@@ -1,5 +1,5 @@
 import { type FC, useState, useEffect } from "react";
-import { Button, Input, Link, NumberField, Label, Group, type PressEvent } from "react-aria-components";
+import { Button, Input, NumberField, Label, Group, type PressEvent } from "react-aria-components";
 
 type PressFunction = (e: PressEvent) => void;
 
