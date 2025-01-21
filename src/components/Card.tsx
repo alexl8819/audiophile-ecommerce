@@ -7,6 +7,8 @@ import { formatCurrency } from '../lib/common';
 import { type ShowcaseStyling, ProductShowcase } from './Gallery';
 import { QuantitySelectionButtonGroup } from './Button';
 
+import { addCartItem } from '../stores/cart';
+
 interface CategoryProductCardProps {
     category: string
     url: string
@@ -110,6 +112,12 @@ export const ProductCard: FC<ProductCardProps> = ({
                                     type='button' 
                                     className='bg-dim-orange text-white py-3 px-8 font-bold uppercase text-[13px] tracking-[1px]'
                                     isDisabled={availableQuantity === 0}
+                                    onPress={() => addCartItem({
+                                        name,
+                                        price,
+                                        slug: productId,
+                                        quantity: quantitySelected
+                                    })}
                                 >
                                     {
                                         availableQuantity && availableQuantity <= 0? 'Out of Stock' : 'Add to Cart'

@@ -8,7 +8,8 @@ export default {
 			},
 			'colors': {
 				'dim-orange': '#D87D4A',
-				'light-gray': '#F1F1F1'
+				'light-gray': '#F1F1F1',
+				'dark-gray': '#979797'
 			},
 			'backgroundImage': {
 				'home-mobile-header': 'url(/image-header.jpg)',

@@ -3,6 +3,13 @@ export interface Item {
     item: string
 }
 
+export interface CartItem {
+    quantity: number
+    name: string
+    price: number
+    slug: string
+}
+
 export interface RecommendedProduct {
     name: string
     slug: string

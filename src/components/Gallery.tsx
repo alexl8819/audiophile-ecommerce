@@ -1,26 +1,29 @@
 import { type FC, useState, useEffect } from "react";
 
 export interface ShowcaseStyling {
-    roundedEdges: boolean
+    roundedEdges?: boolean
 }
 
 interface ProductShowcaseProps {
     name: string
     path: string
     target: string
+    responsive?: boolean
     styles?: ShowcaseStyling
 }
 
-export const ProductShowcase: FC<ProductShowcaseProps> = ({ name, path, target, styles }) => {
+export const ProductShowcase: FC<ProductShowcaseProps> = ({ name, path, target, responsive = true, styles }) => {
     const [mobileThumbnail, setMobileThumbnail] = useState<string | null>(null);
     const [tabletThumbnail, setTabletThumbnail] = useState<string | null>(null);
     const [desktopThumbnail, setDesktopThumbnail] = useState<string | null>(null);
 
-    const loadThumbnail = async (viewportModifier: string) => {
+    const loadThumbnail = async (viewportModifier?: string) => {
         let loadedThumbnail = null;
 
         try {
-            loadedThumbnail = await import(`../assets/${path}/${viewportModifier}/${target}.jpg`);
+            loadedThumbnail = await import(responsive ? 
+                `../assets/${path}/${viewportModifier}/${target}.jpg` : `../assets/${path}/${target}.jpg`
+            );
         } catch (err) {
             console.error(err);
         }
@@ -35,9 +38,13 @@ export const ProductShowcase: FC<ProductShowcaseProps> = ({ name, path, target, 
     }
 
     useEffect(() => {
-        loadThumbnail('mobile');
-        loadThumbnail('tablet');
-        loadThumbnail('desktop');
+        if (!responsive) {
+            loadThumbnail();
+        } else {
+            loadThumbnail('mobile');
+            loadThumbnail('tablet');
+            loadThumbnail('desktop');
+        }
     }, []);
 
     return (
@@ -50,9 +57,25 @@ export const ProductShowcase: FC<ProductShowcaseProps> = ({ name, path, target, 
                             <source srcSet={mobileThumbnail} media="(max-width: 767px)" className={`${styles && styles.roundedEdges ? 'rounded-lg' : ''}`} />
                             <source srcSet={tabletThumbnail} media="(max-width: 1023px)" className={`${styles && styles.roundedEdges ? 'rounded-lg' : ''}`} />
                             <source srcSet={desktopThumbnail} media="(min-width: 1024px)" className={`${styles && styles.roundedEdges ? 'rounded-lg' : ''}`} />
-                            <img className={`w-auto h-auto ${styles && styles.roundedEdges ? 'rounded-lg' : ''}`} src={mobileThumbnail} alt={`${name} product preview`} loading='lazy' />
+                            <img 
+                                className={
+                                    `w-auto h-auto ${styles && styles.roundedEdges ? 'rounded-lg' : ''}`
+                                } 
+                                src={mobileThumbnail} 
+                                alt={`${name} product preview`} 
+                                loading='lazy' 
+                            />
                         </picture>
 			        </figure>
+                ) : desktopThumbnail ? (
+                    <img 
+                        className={
+                            `w-auto h-auto ${styles && styles.roundedEdges ? 'rounded-lg' : ''}`
+                        } 
+                        src={desktopThumbnail} 
+                        alt={`${name} product preview`} 
+                        loading='lazy' 
+                    />
                 ) : null
             }
         </>
