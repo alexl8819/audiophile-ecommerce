@@ -11,17 +11,16 @@ if (typeof window !== 'undefined') {
     let listeners: Array<any> = [];
 
     setPersistentEngine(window.sessionStorage, {
-            addEventListener (_, callback) {
-                listeners.push(callback)
-            },
-            removeEventListener (_, callback) {
-                listeners = listeners.filter(i => i !== callback)
-            },
-            // window dispatches "storage" events for any key change
-            // => One listener for all map keys is enough
-            perKey: false
-        }
-    );
+        addEventListener (_, callback) {
+            listeners.push(callback)
+        },
+        removeEventListener (_, callback) {
+            listeners = listeners.filter(i => i !== callback)
+        },
+        // window dispatches "storage" events for any key change
+        // => One listener for all map keys is enough
+        perKey: false
+    });
 }
 
 export const isOpen = atom<boolean>(false);
