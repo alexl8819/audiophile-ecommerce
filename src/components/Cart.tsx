@@ -1,9 +1,9 @@
-import { type FC } from 'react';
+import { type FC, useState, useEffect } from 'react';
 import { Button, Link } from 'react-aria-components';
 import { useStore } from '@nanostores/react';
 import type { CartItem } from '../lib/constants';
 import { isOpen, toggleCart, empty, type Cart as ShoppingCart } from '../stores/cart';
-import { Xmark } from './LineIcon';
+import { Xmark, Cart as CartIcon } from './LineIcon';
 import ProductShowcase from './Gallery';
 import { QuantitySelectionButtonGroup } from './Button';
 import { formatCurrency } from '../lib/common';
@@ -14,13 +14,13 @@ interface CartItemProps {
 
 const CartItem: FC<CartItemProps> = ({ item }) => {
     return (
-        <div className='flex flex-row justify-evenly items-center'>
+        <div className='flex flex-row items-center my-2'>
             <div className='w-16'>
                 <ProductShowcase name={item.name} path='cart' target={`image-${item.slug}`} responsive={false} />
             </div>
-            <div className='flex flex-col w-auto'>
-                <p>{ item.name }</p>
-                <p>{ formatCurrency(item.price) } </p>
+            <div className='flex flex-col w-24 mx-2'>
+                <p className='truncate font-bold text-[15px] leading-[25px]'>{ item.name }</p>
+                <p className='font-bold text-[15px] leading-[25px] opacity-50'>{ formatCurrency(item.price) } </p>
             </div>
             <div className='w-20'>
                 <QuantitySelectionButtonGroup label='Item Quantity' value={item.quantity} increment={() => {}} decrement={() => {}} isDisabled={false} />
@@ -34,7 +34,16 @@ interface CartProps {
 }
 
 export const Cart: FC<CartProps> = ({ items }) => {
+    const [subtotal, setSubtotal] = useState<number>(0);
     const opened = useStore(isOpen);
+
+    const calculateSubtotal = () => {
+        setSubtotal(Object.values(items).reduce((acc, cur) => acc + (cur.quantity * cur.price), 0));
+    }
+
+    useEffect(() => {
+        calculateSubtotal();
+    }, [items]);
 
     if (!opened) {
         return null;
@@ -53,21 +62,40 @@ export const Cart: FC<CartProps> = ({ items }) => {
                     </div>
                     <div className='flex flex-row justify-between items-center my-3'>
                         <h3 className='font-bold uppercase'>Cart (<span>{ size }</span>)</h3>
-                        <Button type='button' className='underline' onPress={() => empty()}>Remove all</Button>
-                    </div>
-                    <ul className='list-none'>
                         {
-                            Object.values(items).map((item: CartItem, index: number) => (
-                                <CartItem key={index} item={item} />
-                            ))
+                            size > 0 ? (
+                                <Button type='button' className='underline' onPress={() => empty()}>Remove all</Button>
+                            ) : null
                         }
-                    </ul>
+                    </div>
+                    {
+                        size > 0 ? (
+                            <ul className='list-none'>
+                            {
+                                Object.values(items).map((item: CartItem, index: number) => (
+                                    <CartItem key={index} item={item} />
+                                ))
+                            }
+                            </ul>
+                        ) : (
+                            <div className='flex flex-col justify-center items-center'>
+                                <CartIcon />
+                                <p className='font-bold text-center opacity-50'>Cart is empty...</p>
+                            </div>
+                        )
+                    }
                     <div className='flex flex-row justify-between items-center my-3'>
                         <span className='uppercase'>Subtotal</span>
-                        <span className='font-bold'>$0</span>
+                        <span className='font-bold'>{ formatCurrency(subtotal)} </span>
                     </div>
                     <div className="flex justify-center items-center text-center">
-                        <Link href='/checkout' className="px-8 py-3 uppercase bg-dim-orange text-white w-full">Checkout</Link>
+                        <Link 
+                            href='/checkout' 
+                            className="px-8 py-3 disabled:bg-dark-gray bg-dim-orange font-bold uppercase text-white text-[13px] tracking-[1px] w-full disabled:cursor-not-allowed"
+                            isDisabled={size === 0}
+                        >
+                            Checkout
+                        </Link>
                     </div>
                 </div>
             </div>
