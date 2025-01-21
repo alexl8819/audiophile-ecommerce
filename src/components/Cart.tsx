@@ -2,7 +2,8 @@ import { type FC, useState, useEffect } from 'react';
 import { Button, Link } from 'react-aria-components';
 import { useStore } from '@nanostores/react';
 import type { CartItem } from '../lib/constants';
-import { isOpen, toggleCart, empty, type Cart as ShoppingCart } from '../stores/cart';
+import { isOpen, updateCartQuantity, toggleCart, empty, type Cart as ShoppingCart } from '../stores/cart';
+import { getProductQuantity } from '../stores/inventory';
 import { Xmark, Cart as CartIcon } from './LineIcon';
 import ProductShowcase from './Gallery';
 import { QuantitySelectionButtonGroup } from './Button';
@@ -13,6 +14,8 @@ interface CartItemProps {
 }
 
 const CartItem: FC<CartItemProps> = ({ item }) => {
+    const available = getProductQuantity(item.slug);
+    
     return (
         <div className='flex flex-row items-center my-2'>
             <div className='w-16'>
@@ -23,7 +26,17 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
                 <p className='font-bold text-[15px] leading-[25px] opacity-50'>{ formatCurrency(item.price) } </p>
             </div>
             <div className='w-20'>
-                <QuantitySelectionButtonGroup label='Item Quantity' value={item.quantity} increment={() => {}} decrement={() => {}} isDisabled={false} />
+                <QuantitySelectionButtonGroup 
+                    label='Item Quantity' 
+                    value={item.quantity} 
+                    increment={() => {
+                        if (item.quantity < available) {
+                            updateCartQuantity(item, 1);
+                        }
+                    }} 
+                    decrement={() => updateCartQuantity(item, -1)}
+                    isDisabled={false} 
+                />
             </div>
         </div>
     );

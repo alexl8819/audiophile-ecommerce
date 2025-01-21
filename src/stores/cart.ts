@@ -1,6 +1,7 @@
 import { persistentAtom, setPersistentEngine } from '@nanostores/persistent';
 import { atom } from 'nanostores';
 import type { CartItem } from '../lib/constants';
+import { getProductQuantity } from './inventory';
 
 export interface Cart {
     [slug: string]: CartItem
@@ -37,9 +38,37 @@ export function toggleCart () {
 export function addCartItem (item: CartItem) {
     const newCart: Cart = {};
     const itemFound = cartItems.get()[item.slug];
+
+    const updatedQuantity = (itemFound ? itemFound.quantity : 0) + item.quantity;
+
+    if (updatedQuantity > getProductQuantity(item.slug)) {
+        return false;
+    }
     
     newCart[item.slug] = Object.assign({}, itemFound || item, {
-        quantity: (itemFound ? itemFound.quantity : 0) + item.quantity
+        quantity: updatedQuantity
+    });
+
+    cartItems.set(Object.assign({}, cartItems.get(), newCart));
+    return true;
+}
+
+export function updateCartQuantity (item: CartItem, quantity: number) {
+    let newCart: Cart = {};
+    const itemFound = cartItems.get()[item.slug];
+
+    if (!itemFound) {
+        throw new Error('Cart item is missing');
+    }
+
+    if (itemFound.quantity <= 1 && quantity === -1) {
+        const { [itemFound.slug]: rmKey, ...partialObj } = cartItems.get();
+        cartItems.set(partialObj);
+        return;
+    }
+    
+    newCart[item.slug] = Object.assign({}, itemFound, {
+        quantity: itemFound.quantity + quantity
     });
 
     cartItems.set(Object.assign({}, cartItems.get(), newCart));

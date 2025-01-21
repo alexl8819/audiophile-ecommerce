@@ -1,6 +1,6 @@
 import { type FC, useState, useEffect } from 'react';
 import { Button, Link } from 'react-aria-components';
-
+import { ToastContainer, toast } from 'react-toastify';
 import iconArrowRight from '../assets/shared/desktop/icon-arrow-right.svg';
 import { type Item, type RecommendedProduct } from '../lib/constants';
 import { formatCurrency } from '../lib/common';
@@ -8,6 +8,9 @@ import { type ShowcaseStyling, ProductShowcase } from './Gallery';
 import { QuantitySelectionButtonGroup } from './Button';
 
 import { addCartItem } from '../stores/cart';
+import { addProductToInventory } from '../stores/inventory';
+
+import 'react-toastify/ReactToastify.css';
 
 interface CategoryProductCardProps {
     category: string
@@ -67,7 +70,6 @@ export const ProductCard: FC<ProductCardProps> = ({
     name, description, category, isPreview, features, productId, 
     isNew, price, galleryImages, availableQuantity, includes
 }) => {
-    // Temporary
     const [quantitySelected, setQuantitySelected] = useState<number>(1);
 
     const changeQuantity = (quantity: number) => {
@@ -79,6 +81,13 @@ export const ProductCard: FC<ProductCardProps> = ({
         
         setQuantitySelected(quantity);
     };
+
+    useEffect(() => {
+        // Add product to local inventory
+        if (!isPreview && availableQuantity) {
+            addProductToInventory(productId, availableQuantity);
+        }
+    }, []);
 
     return (
         <div className={!isPreview ? 'text-left' : 'text-center'}>
@@ -112,12 +121,17 @@ export const ProductCard: FC<ProductCardProps> = ({
                                     type='button' 
                                     className='bg-dim-orange text-white py-3 px-8 font-bold uppercase text-[13px] tracking-[1px]'
                                     isDisabled={availableQuantity === 0}
-                                    onPress={() => addCartItem({
-                                        name,
-                                        price,
-                                        slug: productId,
-                                        quantity: quantitySelected
-                                    })}
+                                    onPress={() => {
+                                        const success = addCartItem({
+                                            name,
+                                            price,
+                                            slug: productId,
+                                            quantity: quantitySelected
+                                        });
+                                        if (success) {
+                                            toast.success(`Added ${quantitySelected}x ${name} to cart`);
+                                        }
+                                    }}
                                 >
                                     {
                                         availableQuantity && availableQuantity <= 0? 'Out of Stock' : 'Add to Cart'
@@ -169,6 +183,7 @@ export const ProductCard: FC<ProductCardProps> = ({
                                 }
                             </ol>
                         </section>
+                        <ToastContainer />
                     </>
                 ) : null
             }
