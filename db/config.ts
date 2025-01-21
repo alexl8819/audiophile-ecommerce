@@ -6,8 +6,7 @@ const Customers = defineTable({
       primaryKey: true
     }),
     emailAddress: column.text(),
-    firstName: column.text(),
-    lastName: column.text(),
+    fullName: column.text(),
     shippingAddress: column.text(),
     billingAddress: column.text()
   }
@@ -86,15 +85,34 @@ const Discounts = defineTable({
   }
 });
 
+const Payments = defineTable({
+  columns: {
+    method: column.text(),
+    number: column.text(),
+    expiration: column.text(),
+    cvv: column.text(),
+    order: column.number({
+      references: () => Orders.columns.id
+    })
+  }
+});
+
 const Orders = defineTable({
   columns: {
-    item: Inventory.columns.id,
-    quantity: column.number(),
+    id: column.number({
+      primaryKey: true
+    }),
+    created: column.date({
+      default: NOW
+    }),
+    item: column.number({
+      references: () => Inventory.columns.id
+    }),
     customer: column.number({
       references: () => Customers.columns.id
     })
   }
-})
+});
 
 const Recommendations = defineTable({
   columns: {
@@ -117,6 +135,7 @@ export default defineDb({
     Inventory,
     Discounts,
     Orders,
+    Payments,
     Recommendations
   }
 });
