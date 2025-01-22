@@ -15,5 +15,6 @@ import db from '@astrojs/db';
 export default defineConfig({
   integrations: [sitemap(), tailwind(), react(), db()],
   adapter: vercel(),
-  output: 'server'
+  output: 'server',
+  prefetch: true
 });
