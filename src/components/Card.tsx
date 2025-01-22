@@ -9,6 +9,7 @@ import { QuantitySelectionButtonGroup } from './Button';
 
 import { addCartItem } from '../stores/cart';
 import { addProductToInventory } from '../stores/inventory';
+import { CategoryDisplaySkeleton } from './Skeleton';
 
 import 'react-toastify/ReactToastify.css';
 
@@ -38,12 +39,14 @@ export const CategoryProductCard: FC<CategoryProductCardProps> = ({ category, ur
 
     return (
         <div className='flex flex-col justify-center items-center bg-light-gray py-6 w-full'>
-            <figure className='flex flex-col justify-center items-center'>
-                { 
-                    thumbnail ? <img src={thumbnail} className='-mt-16 w-auto h-[104px]' alt={`${category} thumbnail`} loading='lazy' /> : null 
-                }
-                <figcaption className='uppercase font-bold text-[15px] leading-normal tracking-[1.07px]'>{ category }</figcaption>
-            </figure>
+            {
+                thumbnail ? (
+                    <figure className='flex flex-col justify-center items-center'>
+                        <img src={thumbnail} className='-mt-16 w-auto h-[104px]' alt={`${category} thumbnail`} loading='lazy' />
+                        <figcaption className='uppercase font-bold text-[15px] leading-normal tracking-[1.07px]'>{ category }</figcaption>
+                    </figure>
+                ) : <CategoryDisplaySkeleton />
+            }
             <Link href={url} className='uppercase flex flex-row items-center space-x-3 mt-[17px]'>
                 <span className='font-bold text-[13px] opacity-50'>Shop</span> 
                 <img src={iconArrowRight.src} alt={`link to ${category}`} />
@@ -130,6 +133,8 @@ export const ProductCard: FC<ProductCardProps> = ({
                                         });
                                         if (success) {
                                             toast.success(`Added ${quantitySelected}x ${name} to cart`);
+                                        } else {
+                                            toast.error(`Quantity requested exceeds available supply`);
                                         }
                                     }}
                                 >
@@ -183,7 +188,7 @@ export const ProductCard: FC<ProductCardProps> = ({
                                 }
                             </ol>
                         </section>
-                        <ToastContainer />
+                        <ToastContainer autoClose={3000} />
                     </>
                 ) : null
             }

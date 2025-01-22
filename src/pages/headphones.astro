@@ -2,7 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header';
 import Footer from '../components/Footer.astro';
-import { CategoryProductCard, ProductCard } from '../components/Card';
+import { ProductCard } from '../components/Card';
+import { NavigationMenu } from '../components/Menu';
 ---
 
 <Layout subtitle="Headphones">
@@ -44,17 +45,7 @@ import { CategoryProductCard, ProductCard } from '../components/Card';
 			/>
 		</section>
 		<section class="my-20">
-			<ol class="list-none flex flex-col space-y-16">
-				<li class="mx-6">
-					<CategoryProductCard category='headphones' url='/headphones' client:visible />
-				</li>
-				<li class="mx-6">
-					<CategoryProductCard category='speakers' url='/speakers' client:visible />
-				</li>
-				<li class="mx-6">
-					<CategoryProductCard category='earphones' url='/earphones' client:visible />
-				</li>
-			</ol>
+			<NavigationMenu categories={['headphones', 'speakers', 'earphones']} client:visible />
 		</section>
 	</main>
 	<Footer navLinks={[

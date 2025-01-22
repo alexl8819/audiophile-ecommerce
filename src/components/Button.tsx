@@ -1,4 +1,4 @@
-import { type FC, useState, useEffect } from "react";
+import { type FC, memo, useState, useEffect } from "react";
 import { Button, Input, NumberField, Label, Group, type PressEvent } from "react-aria-components";
 
 type PressFunction = (e: PressEvent) => void;
@@ -11,7 +11,7 @@ interface ButtonIconProps {
     onPress: PressFunction
 }
 
-export const StyledIconButton: FC<ButtonIconProps> = ({ iconName, altText, text, onPress, viewportModifier = 'desktop' }) => {
+export const StyledIconButton: FC<ButtonIconProps> = memo(({ iconName, altText, text, onPress, viewportModifier = 'desktop' }) => {
     const [icon, setIcon] = useState<string | null>(null);
     
     const loadIcon = async () => {
@@ -44,7 +44,7 @@ export const StyledIconButton: FC<ButtonIconProps> = ({ iconName, altText, text,
             }
         </Button>
     );
-}
+});
 
 interface QuantitySelectionButtonGroupProps {
     label: string
@@ -71,8 +71,8 @@ export const QuantitySelectionButtonGroup: FC<QuantitySelectionButtonGroupProps>
                 <Input
                     type='number' 
                     value={value} 
-                    className='w-12 text-center'
-                    readOnly={isDisabled}
+                    className='w-12 bg-light-gray text-center cursor-pointer'
+                    readOnly={true}
                 />
                 <Button 
                     slot='increment' 

@@ -5,7 +5,7 @@ import { Link } from 'react-aria-components';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header';
 import Footer from '../components/Footer.astro';
-import { CategoryProductCard } from '../components/Card';
+import { NavigationMenu } from '../components/Menu';
 
 import mobileZxNineSpeaker from '../assets/home/mobile/image-speaker-zx9.png';
 import tabletZxNineSpeaker from '../assets/home/tablet/image-speaker-zx9.png';
@@ -29,17 +29,7 @@ import desktopYxOneEarphones from '../assets/home/desktop/image-earphones-yx1.jp
 			</div>
 		</section>
 		<section class="my-20">
-			<ol class="list-none flex flex-col space-y-16">
-				<li class="mx-6">
-					<CategoryProductCard category='headphones' url='/headphones' client:visible />
-				</li>
-				<li class="mx-6">
-					<CategoryProductCard category='speakers' url='/speakers' client:visible />
-				</li>
-				<li class="mx-6">
-					<CategoryProductCard category='earphones' url='/earphones' client:visible />
-				</li>
-			</ol>
+			<NavigationMenu categories={['headphones', 'speakers', 'earphones']} client:visible />
 		</section>
 		<section class="bg-dim-orange rounded-lg h-[600px] text-center text-white py-8 mx-6">
 			<div class="bg-circle-pattern bg-cover bg-top bg-no-repeat h-full">

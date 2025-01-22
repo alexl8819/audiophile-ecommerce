@@ -1,4 +1,5 @@
-import { type FC, useState, useEffect } from "react";
+import { type FC, useState, useEffect, memo } from "react";
+import { ProductDisplaySkeleton } from "./Skeleton";
 
 export interface ShowcaseStyling {
     roundedEdges?: boolean
@@ -12,7 +13,7 @@ interface ProductShowcaseProps {
     styles?: ShowcaseStyling
 }
 
-export const ProductShowcase: FC<ProductShowcaseProps> = ({ name, path, target, responsive = true, styles }) => {
+export const ProductShowcase: FC<ProductShowcaseProps> = memo(({ name, path, target, responsive = true, styles }) => {
     const [mobileThumbnail, setMobileThumbnail] = useState<string | null>(null);
     const [tabletThumbnail, setTabletThumbnail] = useState<string | null>(null);
     const [desktopThumbnail, setDesktopThumbnail] = useState<string | null>(null);
@@ -76,10 +77,10 @@ export const ProductShowcase: FC<ProductShowcaseProps> = ({ name, path, target, 
                         alt={`${name} product preview`} 
                         loading='lazy' 
                     />
-                ) : null
+                ) : <ProductDisplaySkeleton />
             }
         </>
     );
-}
+});
 
 export default ProductShowcase;
