@@ -1,13 +1,19 @@
 ---
+import { Link } from 'react-aria-components';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header';
 import Footer from '../components/Footer.astro';
+import { OrderForm } from '../components/forms/OrderForm';
 ---
 <Layout subtitle="Checkout">
 	<Header client:load />
 	<main class="container mb-8">
-		<section class="">
-			
+		<div class="mt-2 mx-6">
+			<Link href="/">Back</Link>
+		</div>
+		<section class="my-4 mx-6">
+			<h1 class="uppercase font-bold text-[28px] tracking-[1px]">Checkout</h1>
+			<OrderForm client:visible />
 		</section>
 	</main>
 	<Footer navLinks={[

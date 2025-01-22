@@ -31,3 +31,14 @@ export interface Product {
     included: string | Array<Item>
     recommendations: string | Array<RecommendedProduct>
 }
+
+export interface Order {
+    name: string
+    email: string
+    phone: string
+    shippingAddress: string
+    zipcode: string
+    city: string
+    country: string
+    paymentMethod: string
+}
