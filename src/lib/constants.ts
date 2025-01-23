@@ -39,6 +39,9 @@ export interface Order {
     shippingAddress: string
     zipcode: string
     city: string
-    country: string
+    country: {
+        label: string
+        value: string
+    }
     paymentMethod: string
 }
