@@ -9,6 +9,7 @@ export default {
 			'colors': {
 				'dim-orange': '#D87D4A',
 				'light-gray': '#F1F1F1',
+				'lighter-gray': '#CFCFCF',
 				'dark-gray': '#979797'
 			},
 			'backgroundImage': {
