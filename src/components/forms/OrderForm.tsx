@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import React, { type FC, type PropsWithChildren } from 'react';
 import { 
     Form, 
     TextField, 
@@ -11,15 +11,16 @@ import {
     ListBox,
     ListBoxItem,
     Popover,
-    FieldError,
-    RadioGroup,
-    Radio
+    FieldError
 } from 'react-aria-components';
+import {
+    PaymentElement,
+    useStripe,
+    useElements,
+  } from '@stripe/react-stripe-js';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { countries, type TCountryCode } from 'countries-list';
 import type { Order } from '../../lib/constants';
-
-interface OrderFormProps {}
 
 const allowedContinents = ['NA', 'EU'];
 
@@ -30,7 +31,10 @@ const selectionItems = Object.keys(countries).filter((country) => (
     value: country
 }))
 
-export const OrderForm: FC<OrderFormProps> = () => {
+export const OrderForm: FC<PropsWithChildren> = ({ children }) => {
+    const stripe = useStripe();
+    const elements = useElements();
+    
     const { control, handleSubmit } = useForm({
         defaultValues: {
             name: '',
@@ -48,7 +52,7 @@ export const OrderForm: FC<OrderFormProps> = () => {
     });
 
     const onSubmit: SubmitHandler<Order> = () => {
-        
+        // TODO: call /order endpoint
     }
 
     return (
@@ -259,8 +263,8 @@ export const OrderForm: FC<OrderFormProps> = () => {
                                     selectionMode='single'
                                 >
                                     {
-                                        selectionItems.map((item) => (
-                                            <ListBoxItem value={value} className='p-1 hover:text-dim-orange cursor-pointer'>
+                                        selectionItems.map((item, index) => (
+                                            <ListBoxItem key={index} value={value} className='p-1 hover:text-dim-orange cursor-pointer'>
                                                 <Text slot="label">{ item.label }</Text>
                                             </ListBoxItem>
                                         ))
@@ -272,7 +276,7 @@ export const OrderForm: FC<OrderFormProps> = () => {
                 )}
             />
             <h2 className='uppercase font-bold text-dim-orange text-[13px] leading-[25px] my-4'>Payment Details</h2>
-            <Controller 
+            {/*<Controller 
                 control={control}
                 name='paymentMethod'
                 rules={{ required: 'City is required.' }}
@@ -322,8 +326,10 @@ export const OrderForm: FC<OrderFormProps> = () => {
                         </RadioGroup>
                     </TextField>
                 )}
-            />
-            <Input type='submit' className='mt-8' value='Place Order' />
+            />*/}
+            <PaymentElement />
+            { children }
+            <Input type='submit' className='mt-8 py-4 px-2 bg-dim-orange text-white font-bold uppercase w-full' value='Continue & Pay' />
         </Form>
     );
 }

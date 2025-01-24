@@ -115,3 +115,52 @@ export const Cart: FC<CartProps> = ({ items }) => {
         </div>
     );
 }
+
+interface CartSummaryItemProps {
+    item: CartItem
+}
+
+const CartSummaryItem: FC<CartSummaryItemProps> = ({ item }) => (
+    <div className='flex flex-row justify-between items-center my-4'>
+        <div className='w-16'>
+            <ProductShowcase name={item.name} path='cart' target={`image-${item.slug}`} responsive={false} />
+        </div>
+        <div className='flex flex-col w-56'>
+            <p className='truncate uppercase font-bold text-[15px] leading-[25px]'>{ item.name }</p>
+            <p className='font-bold text-[14px] leading-[25px] opacity-50'>{ formatCurrency(item.price) }</p>
+        </div>
+        <div className='w-auto'>
+            <span className='font-bold text-[15px] leading-[25px] opacity-50'>x{ item.quantity }</span>
+        </div>
+    </div>
+)
+
+interface CartSummaryProps {
+    items: ShoppingCart
+}
+
+export const CartSummary: FC<CartSummaryProps> = ({ items }) => {
+    return (
+        <div className='flex flex-col py-4'>
+            <h2 className='uppercase text-left font-bold text-[18px] tracking-[1.29px]'>Summary</h2>
+            <ul className='list-none'>
+                {
+                    Object.values(items).map((item: CartItem, index: number) => (
+                        <li key={index}>
+                            <CartSummaryItem item={item} />
+                        </li>
+                    ))
+                }
+            </ul>
+            <div className='flex flex-row justify-between items-center'>
+                <span className='uppercase'>Subtotal</span>
+            </div>
+            <div className='flex flex-row justify-between items-center'>
+                <span className='uppercase'>Shipping</span>
+            </div>
+            <div className='flex flex-row justify-between items-center'>
+                <span className='uppercase'>Total</span>
+            </div>
+        </div>
+    );
+} 

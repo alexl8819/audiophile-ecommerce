@@ -3,7 +3,10 @@ import { Link } from 'react-aria-components';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header';
 import Footer from '../components/Footer.astro';
-import { OrderForm } from '../components/forms/OrderForm';
+import { CheckoutPreview } from '../components/Checkout';
+
+// TODO: implement server-side cart
+const amountDue = 2000;
 ---
 <Layout subtitle="Checkout">
 	<Header client:load />
@@ -13,7 +16,7 @@ import { OrderForm } from '../components/forms/OrderForm';
 		</div>
 		<section class="my-4 mx-6">
 			<h1 class="uppercase font-bold text-[28px] tracking-[1px] mb-8">Checkout</h1>
-			<OrderForm client:visible />
+			<CheckoutPreview amountDue={amountDue} client:load />
 		</section>
 	</main>
 	<Footer navLinks={[
