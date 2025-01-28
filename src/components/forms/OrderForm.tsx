@@ -29,13 +29,12 @@ const selectionItems: Array<CountrySelection> = Object.keys(countries).filter((c
     value: country
 }));
 
-console.log(selectionItems);
-
 interface OrderFormProps extends PropsWithChildren {
     onCountrySet: (countryCode: string) => void
+    onFinish: (success: boolean) => void
 }
 
-export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet }) => {
+export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish }) => {
     const stripe = useStripe();
     const elements = useElements();
     
@@ -317,7 +316,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet }) => {
             />*/}
             <PaymentElement />
             { children }
-            <Input type='submit' className='mt-8 py-4 px-2 bg-dim-orange text-white font-bold uppercase w-full' value='Continue & Pay' />
+            <Input type='submit' className='mt-8 py-4 px-2 bg-dim-orange text-white font-bold uppercase w-full' value='Continue & Pay' onClick={() => onFinish(true)} />
         </Form>
     );
 }

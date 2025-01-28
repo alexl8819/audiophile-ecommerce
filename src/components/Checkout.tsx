@@ -1,12 +1,14 @@
 import { type FC, useState, useEffect } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import countryVat from 'country-vat';
+import { useStore } from '@nanostores/react';
 
 import { OrderForm } from './forms/OrderForm';
 import stripeClient from '../lib/stripe'; 
 import { CartSummary } from './Cart';
 import { cartItems } from '../stores/cart';
-import { useStore } from '@nanostores/react';
+import { toggleCompletion } from '../stores/order';
+import { OrderSummary } from './Order';
 
 interface CheckoutProps {
     amountDue: number
@@ -29,6 +31,10 @@ export const CheckoutPreview: FC<CheckoutProps> = ({ amountDue, shippingCost }) 
         setVatRate(rate);
     };
 
+    const handleOrderComplete = (success: boolean) => {
+        toggleCompletion(success);
+    };
+
     useEffect(() => {
         setTotal(amountDue + (vatRate > 0 ? (amountDue * vatRate) : 0) + shippingCost);
     }, [vatRate]);
@@ -43,9 +49,10 @@ export const CheckoutPreview: FC<CheckoutProps> = ({ amountDue, shippingCost }) 
             amount: total,
             currency: 'usd'
         }}>
-            <OrderForm onCountrySet={handleCountrySet}>
+            <OrderForm onCountrySet={handleCountrySet} onFinish={handleOrderComplete}>
                 <CartSummary items={items} shippingFee={shippingCost} vatRate={vatRate} />
             </OrderForm>
+            <OrderSummary sampleItem={Object.values(items)[0]} itemsInCart={Object.keys(items).length} total={total} />
         </Elements>
     )
 }
