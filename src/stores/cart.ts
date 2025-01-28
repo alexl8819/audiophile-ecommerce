@@ -1,4 +1,4 @@
-import { persistentAtom, setPersistentEngine } from '@nanostores/persistent';
+import { persistentAtom, setPersistentEngine, type PersistentListener } from '@nanostores/persistent';
 import { atom } from 'nanostores';
 import type { CartItem } from '../lib/constants';
 import { getProductQuantity } from './inventory';
@@ -9,7 +9,7 @@ export interface Cart {
 
 // Switch from localStorage to sessionStorage
 if (typeof window !== 'undefined') {
-    let listeners: Array<any> = [];
+    let listeners: Array<PersistentListener> = [];
 
     setPersistentEngine(window.sessionStorage, {
         addEventListener (_, callback) {
@@ -54,7 +54,7 @@ export function addCartItem (item: CartItem) {
 }
 
 export function updateCartQuantity (item: CartItem, quantity: number) {
-    let newCart: Cart = {};
+    const newCart: Cart = {};
     const itemFound = cartItems.get()[item.slug];
 
     if (!itemFound) {
@@ -62,7 +62,7 @@ export function updateCartQuantity (item: CartItem, quantity: number) {
     }
 
     if (itemFound.quantity <= 1 && quantity === -1) {
-        const { [itemFound.slug]: rmKey, ...partialObj } = cartItems.get();
+        const { [itemFound.slug]: _, ...partialObj } = cartItems.get();
         cartItems.set(partialObj);
         return;
     }
