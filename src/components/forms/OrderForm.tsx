@@ -1,41 +1,45 @@
-import React, { type FC, type PropsWithChildren } from 'react';
+import { type FC, type PropsWithChildren } from 'react';
 import { 
     Form, 
     TextField, 
     Label, 
-    Input,
-    Text,
-    Select, 
-    Button, 
-    SelectValue,
-    ListBox,
-    ListBoxItem,
-    Popover,
-    FieldError
+    Input
 } from 'react-aria-components';
 import {
     PaymentElement,
     useStripe,
     useElements,
   } from '@stripe/react-stripe-js';
+import Select, { type SingleValue } from 'react-select';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { countries, type TCountryCode } from 'countries-list';
 import type { Order } from '../../lib/constants';
 
 const allowedContinents = ['NA', 'EU'];
 
-const selectionItems = Object.keys(countries).filter((country) => (
+type CountrySelection = {
+    label: string
+    value: string
+}
+
+const selectionItems: Array<CountrySelection> = Object.keys(countries).filter((country) => (
     allowedContinents.includes(countries[country as TCountryCode].continent)
 )).map((country) => ({
     label: countries[country as TCountryCode].name,
     value: country
-}))
+}));
 
-export const OrderForm: FC<PropsWithChildren> = ({ children }) => {
+console.log(selectionItems);
+
+interface OrderFormProps extends PropsWithChildren {
+    onCountrySet: (countryCode: string) => void
+}
+
+export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet }) => {
     const stripe = useStripe();
     const elements = useElements();
     
-    const { control, handleSubmit } = useForm({
+    const { control, handleSubmit, watch } = useForm({
         defaultValues: {
             name: '',
             email: '',
@@ -54,6 +58,10 @@ export const OrderForm: FC<PropsWithChildren> = ({ children }) => {
     const onSubmit: SubmitHandler<Order> = () => {
         // TODO: call /order endpoint
     }
+
+    const dot = () => ({
+        padding: '8px 12px'
+    });
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -230,50 +238,30 @@ export const OrderForm: FC<PropsWithChildren> = ({ children }) => {
                 control={control}
                 name='country'
                 rules={{ required: 'Country is required.' }}
-                render={({
-                    field: { name, value, onChange, onBlur, ref },
-                    fieldState: { invalid, error }
-                }) => (
-                    <TextField 
-                        name={name}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        isRequired
-                        validationBehavior="aria"
-                        isInvalid={invalid}
-                        className='flex flex-col'
-                    >
-                        <Select 
-                            ref={ref} 
-                            className='flex flex-col w-full' 
-                        >
-                            <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Country</Label>
-                            <Button className='border border-lighter-gray py-3 px-6 rounded-lg'>
-                                <SelectValue>
-                                    {({defaultChildren, isPlaceholder}) => {
-                                        return isPlaceholder ? <>Select Country</> : defaultChildren;
-                                    }}
-                                </SelectValue>
-                            </Button>
-                            <Text slot="description" />
-                            <FieldError />
-                            <Popover className='max-h-60 w-[--trigger-width] overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black/5 entering:animate-in entering:fade-in exiting:animate-out exiting:fade-out'>
-                                <ListBox
-                                    items={selectionItems} 
-                                    selectionMode='single'
-                                >
-                                    {
-                                        selectionItems.map((item, index) => (
-                                            <ListBoxItem key={index} value={value} className='p-1 hover:text-dim-orange cursor-pointer'>
-                                                <Text slot="label">{ item.label }</Text>
-                                            </ListBoxItem>
-                                        ))
-                                    }
-                                </ListBox>
-                            </Popover>    
-                        </Select>
-                    </TextField>
+                render={({ field }) => (
+                    <>
+                        <Label htmlFor={field.name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Country</Label>
+                        <Select
+                            {...field}
+                            className="pt-2"
+                            styles={{
+                                control: (styles) => ({ ...styles, ...dot() }),
+                            }}
+                            defaultValue={selectionItems[1]}
+                            isClearable={false}
+                            isSearchable={true}
+                            options={selectionItems}
+                            onChange={(newVal: SingleValue<CountrySelection>) => {
+                                field.onChange(newVal);
+                                if (newVal) {
+                                    // Update VAT rate dynamically for cart preview
+                                    onCountrySet(newVal.value);
+                                }
+                            }}
+                        />
+                    </>
                 )}
+               
             />
             <h2 className='uppercase font-bold text-dim-orange text-[13px] leading-[25px] my-4'>Payment Details</h2>
             {/*<Controller 
