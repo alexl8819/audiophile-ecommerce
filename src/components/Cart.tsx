@@ -120,7 +120,7 @@ interface CartSummaryItemProps {
     item: CartItem
 }
 
-const CartSummaryItem: FC<CartSummaryItemProps> = ({ item }) => (
+export const CartSummaryItem: FC<CartSummaryItemProps> = ({ item }) => (
     <div className='flex flex-row justify-between items-center my-4'>
         <div className='w-16'>
             <ProductShowcase name={item.name} path='cart' target={`image-${item.slug}`} responsive={false} />
