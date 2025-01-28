@@ -1,4 +1,4 @@
-import { type FC, useState, useEffect } from 'react';
+import { type FC, useState, useEffect, memo } from 'react';
 import { Button, Link } from 'react-aria-components';
 import { useStore } from '@nanostores/react';
 import type { CartItem } from '../lib/constants';
@@ -137,9 +137,28 @@ const CartSummaryItem: FC<CartSummaryItemProps> = ({ item }) => (
 
 interface CartSummaryProps {
     items: ShoppingCart
+    shippingFee: number
+    vatRate: number
 }
 
-export const CartSummary: FC<CartSummaryProps> = ({ items }) => {
+export const CartSummary: FC<CartSummaryProps> = memo(({ items, shippingFee, vatRate }) => {
+    const [subtotal, setSubtotal] = useState<number>(0);
+    const [vatCost, setVatCost] = useState<number>(0);
+    const [grandTotal, setGrandTotal] = useState<number>(0);
+
+    const calculateAll = () => {
+        const newSubtotal = Object.values(items).reduce((acc, item) => acc += (item.quantity * item.price), 0);
+        setSubtotal(newSubtotal);
+        const newVatCost = vatRate > 0 ? newSubtotal * vatRate : 0;
+        setVatCost(newVatCost);
+        const newGrandtotal = (newSubtotal + shippingFee);
+        setGrandTotal(newGrandtotal);
+    }
+
+    useEffect(() => {
+        calculateAll();
+    }, [vatRate]);
+
     return (
         <div className='flex flex-col py-4'>
             <h2 className='uppercase text-left font-bold text-[18px] tracking-[1.29px]'>Summary</h2>
@@ -153,14 +172,25 @@ export const CartSummary: FC<CartSummaryProps> = ({ items }) => {
                 }
             </ul>
             <div className='flex flex-row justify-between items-center'>
-                <span className='uppercase'>Subtotal</span>
+                <span className='uppercase font-medium leading-[25px] opacity-50'>Subtotal</span>
+                <span className='font-bold text-[18px]'>{ formatCurrency(subtotal) }</span>
             </div>
             <div className='flex flex-row justify-between items-center'>
-                <span className='uppercase'>Shipping</span>
+                <span className='uppercase font-medium leading-[25px] opacity-50'>Shipping</span>
+                <span className='font-bold text-[18px]'>{ formatCurrency(shippingFee) }</span>
             </div>
-            <div className='flex flex-row justify-between items-center'>
-                <span className='uppercase'>Total</span>
+            {
+                vatRate > 0 ? (
+                    <div className='flex flex-row justify-between items-center'>
+                        <span className='uppercase font-medium leading-[25px] opacity-50'>VAT (included @ { vatRate }%)</span>
+                        <span className='font-bold text-[18px]'>{ formatCurrency(vatCost) }</span>
+                    </div>
+                ) : null
+            }
+            <div className='flex flex-row justify-between items-center mt-8'>
+                <span className='uppercase font-medium leading-[25px] opacity-50'>Total</span>
+                <span className='font-bold text-[18px]'>{ formatCurrency(grandTotal) }</span>
             </div>
         </div>
     );
-} 
+});

@@ -9,19 +9,20 @@ import { useStore } from '@nanostores/react';
 
 interface CheckoutProps {
     amountDue: number
+    shippingCost: number
 }
 
-export const CheckoutPreview: FC<CheckoutProps> = ({ amountDue }) => {
+export const CheckoutPreview: FC<CheckoutProps> = ({ amountDue, shippingCost }) => {
     const items = useStore(cartItems);
 
     return (
         <Elements stripe={stripeClient} options={{
             mode: 'payment',
-            amount: amountDue,
+            amount: amountDue + shippingCost,
             currency: 'usd'
         }}>
             <OrderForm>
-                <CartSummary items={items} />
+                <CartSummary items={items} shippingFee={shippingCost} />
             </OrderForm>
         </Elements>
     )
