@@ -45,3 +45,5 @@ export interface Order {
     }
     paymentMethod: string
 }
+
+export const FLAT_SHIPPING_RATE = 0.08;
