@@ -106,7 +106,7 @@ export const NavigationButton: FC<NavigationButtonProps> = ({ method, children }
     }
 
     useEffect(() => {
-        if (typeof window !== undefined) {
+        if (typeof window !== 'undefined') {
             setWindow(window);
         }
     }, []);

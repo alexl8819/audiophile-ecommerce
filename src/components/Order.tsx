@@ -40,7 +40,7 @@ export const OrderSummary: FC<OrderSummaryProps> = ({ sampleItem, itemsInCart, t
     }
 
     useEffect(() => {
-        if (typeof window !== undefined) {
+        if (typeof window !== 'undefined') {
             setWindow(window);
         }
 
