@@ -1,4 +1,4 @@
-import { type FC, memo, useState, useEffect } from "react";
+import { type FC, memo, useState, useEffect, type PropsWithChildren } from "react";
 import { Button, Input, NumberField, Label, Group, type PressEvent } from "react-aria-components";
 
 type PressFunction = (e: PressEvent) => void;
@@ -85,5 +85,35 @@ export const QuantitySelectionButtonGroup: FC<QuantitySelectionButtonGroupProps>
                 </Button>
             </Group>
         </NumberField>
+    );
+}
+
+export enum NavigationMethod {
+    Back = 0
+}
+
+interface NavigationButtonProps extends PropsWithChildren {
+    method: NavigationMethod
+}
+
+export const NavigationButton: FC<NavigationButtonProps> = ({ method, children }) => {
+    const [_window, setWindow] = useState<Window | null>(null);
+    
+    const handleNav = () => {
+        if (_window && method === NavigationMethod.Back) {
+            _window.history.back();
+        }
+    }
+
+    useEffect(() => {
+        if (typeof window !== undefined) {
+            setWindow(window);
+        }
+    }, []);
+
+    return (
+        <Button onPress={handleNav}>
+            { children }
+        </Button>
     );
 }

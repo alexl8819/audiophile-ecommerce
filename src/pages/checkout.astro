@@ -1,22 +1,21 @@
 ---
-import { Link } from 'react-aria-components';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header';
 import Footer from '../components/Footer.astro';
 import { CheckoutPreview } from '../components/Checkout';
-
-// TODO: implement server-side cart
+import { NavigationButton, NavigationMethod } from '../components/Button';
+// TODO: implement server-side validation
 const amountDue = 2000;
 ---
 <Layout subtitle="Checkout">
 	<Header client:load />
 	<main class="container mb-8">
 		<div class="mt-2 mx-6">
-			<Link href="/">Back</Link>
+			<NavigationButton method={NavigationMethod.Back} client:load>Back</NavigationButton>
 		</div>
 		<section class="my-4 mx-6">
 			<h1 class="uppercase font-bold text-[28px] tracking-[1px] mb-8">Checkout</h1>
-			<CheckoutPreview amountDue={amountDue} client:load />
+			<CheckoutPreview amountDue={amountDue} shippingCost={amountDue * 0.08} client:load />
 		</section>
 	</main>
 	<Footer navLinks={[

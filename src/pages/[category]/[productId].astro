@@ -10,6 +10,7 @@ import Footer from '../../components/Footer.astro';
 import { ProductCard, RecommendedProductCard } from '../../components/Card';
 import { NavigationMenu } from '../../components/Menu';
 import { type Product, type Item, type RecommendedProduct } from '../../lib/constants';
+import { NavigationButton, NavigationMethod } from '../../components/Button';
 
 const { category, productId } = Astro.params;
 
@@ -44,7 +45,7 @@ selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as 
 	<Header client:load />
 	<main class="container py-2 mb-8">
 		<div class="mx-6">
-			<Link href={`/${category}`}>Back</Link>
+			<NavigationButton method={NavigationMethod.Back} client:load>Back</NavigationButton>
 		</div>
 		<section class="my-12 mx-6">
             <ProductCard
