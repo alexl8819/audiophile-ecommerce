@@ -13,7 +13,9 @@ export default {
 				'dark-gray': '#979797'
 			},
 			'backgroundImage': {
-				'home-mobile-header': 'url(/image-header.jpg)',
+				'home-mobile-header': 'url(/mobile/image-header.jpg)',
+				'home-tablet-header': 'url(/tablet/image-header.jpg)',
+				'home-desktop-header': 'url(/desktop/image-hero.jpg)',
 				'home-mobile-zx7-speaker': 'url(/mobile/image-speaker-zx7.jpg)',
 				'home-tablet-zx7-speaker': 'url(/tablet/image-speaker-zx7.jpg)',
 				'home-desktop-zx7-speaker': 'url(/desktop/image-speaker-zx7.jpg)',
