@@ -18,8 +18,8 @@ import desktopYxOneEarphones from '../assets/home/desktop/image-earphones-yx1.jp
 
 <Layout subtitle="Home">
 	<Header client:load />
-	<main class="container mb-8">
-		<section class="text-white bg-home-mobile-header bg-no-repeat bg-cover bg-center pt-8 pb-10 mb-4">
+	<main class="mb-8 mx-auto">
+		<section class="text-white bg-home-mobile-header md:bg-home-tablet-header lg:bg-home-desktop-header bg-no-repeat bg-cover bg-center pt-8 pb-10 md:py-20 mb-4">
 			<div class="flex flex-col justify-center items-center text-center py-2 px-6">
 				<p class="text-[14px] tracking-[10px] uppercase mt-16 mb-[8px] opacity-50">New product</p>
   				<h2 class="font-bold text-[36px] leading-[40px] tracking-[1.29px] mt-[8px] mb-[12px]">XX99 Mark II Headphones</h2>
@@ -28,11 +28,11 @@ import desktopYxOneEarphones from '../assets/home/desktop/image-earphones-yx1.jp
 				<Link href="/headphones/xx99-mark-two-headphones" className='bg-dim-orange text-white font-bold text-[13px] tracking-[1px] uppercase w-[160px] mt-[14px] py-3 rounded-sm'>See product</Link>
 			</div>
 		</section>
-		<section class="my-20">
+		<section class="my-24">
 			<NavigationMenu categories={['headphones', 'speakers', 'earphones']} client:visible />
 		</section>
-		<section class="bg-dim-orange rounded-lg h-[600px] text-center text-white py-8 mx-6">
-			<div class="bg-circle-pattern bg-cover bg-top bg-no-repeat h-full">
+		<section class="bg-dim-orange rounded-lg text-center text-white py-12 mx-6">
+			<div class="bg-circle-pattern bg-cover bg-top bg-no-repeat h-full md:px-28">
 				<figure class="flex flex-col justify-center items-center mx-16">
 					<picture>
 						<source srcset={mobileZxNineSpeaker.src} media="(max-width: 767px)">
@@ -40,14 +40,14 @@ import desktopYxOneEarphones from '../assets/home/desktop/image-earphones-yx1.jp
 						<source srcset={desktopZxNineSpeaker.src} media="(min-width: 1024px)">
 						<Image class="w-[172px] h-auto" src={mobileZxNineSpeaker} alt="ZX9 Speaker" loading='lazy' />
 					</picture>
-					<figcaption class="font-bold uppercase text-[36px] leading-[40px] mt-8">ZX9 Speaker</figcaption>
+					<figcaption class="font-bold uppercase text-[36px] md:text-[56px] leading-[40px] md:leading-[58px] md:tracking-[2px] mt-8">ZX9 Speaker</figcaption>
 				</figure>
-				<p class="mt-4 mb-8 mx-6 font-medium text-[15px] leading-[25px] opacity-75">Upgrade to premium speakers that are phenomenally built to deliver truly remarkable sound.</p>
+				<p class="mt-4 md:mt-6 mb-10 mx-6 md:px-16 font-medium text-[15px] leading-[25px] opacity-75">Upgrade to premium speakers that are phenomenally built to deliver truly remarkable sound.</p>
 	
 				<Link href="/speakers/zx9-speaker" className="bg-black py-3 px-8 font-bold uppercase text-[13px]">See product</Link>
 			</div>
 		</section>
-		<section class="bg-light-gray h-[320px] text-left text-black my-6 mx-6">
+		<section class="bg-light-gray text-left text-black my-6 mx-6">
 			<div class="bg-home-mobile-zx7-speaker md:bg-home-tablet-zx7-speaker lg:bg-home-desktop-zx7-speaker bg-contain bg-no-repeat h-full rounded-lg">
 				<div class="py-24 px-8">
 					<h3 class="font-bold uppercase text-[28px] tracking-[2px] mb-12">ZX7 Speaker</h3>
@@ -59,17 +59,17 @@ import desktopYxOneEarphones from '../assets/home/desktop/image-earphones-yx1.jp
 				</div>
 			</div>
 		</section>
-		<section class="bg-light-gray h-[424px] text-black mx-6">
+		<section class="bg-light-gray flex flex-col md:flex-row text-black mx-6">
 			<figure>
 				<picture>
 					<source srcset={mobileYxOneEarphones.src} media="(max-width: 767px)">
 					<source srcset={tabletYxOneEarphones.src} media="(max-width: 1023px)">
 					<source srcset={desktopYxOneEarphones.src} media="(min-width: 1024px)">
-					<Image class="rounded-lg" src={mobileYxOneEarphones} alt="photo of YX1 Earphones" loading="lazy" />	
+					<Image class="rounded-lg w-[327px] h-auto" src={mobileYxOneEarphones} alt="photo of YX1 Earphones" loading="lazy" />	
 				</picture>
-				<figcaption class="font-bold uppercase text-[28px] tracking-[2px] mt-12 mb-8 px-6">YX1 Earphones</figcaption>
 			</figure>
-			<div class="px-6">
+			<div class="flex flex-col items-start md:justify-center px-6 md:px-8 mb-6 md:mb-0">
+				<h3 class="font-bold uppercase text-[28px] tracking-[2px] mt-12 md:mt-0">YX1 Earphones</h3>
 				<Link 
 					href="/earphones/yx1-earphones" 
 					className="mt-8 bg-transparent py-3 px-8 font-bold uppercase text-[13px] border border-black">
