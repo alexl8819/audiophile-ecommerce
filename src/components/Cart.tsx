@@ -17,7 +17,7 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
     const available = getProductQuantity(item.slug);
     
     return (
-        <div className='flex flex-row items-center my-2'>
+        <div className='flex flex-row justify-start items-center my-4'>
             <div className='w-16'>
                 <ProductShowcase name={item.name} path='cart' target={`image-${item.slug}`} responsive={false} />
             </div>
@@ -66,7 +66,7 @@ export const Cart: FC<CartProps> = ({ items }) => {
 
     return (
         <div className='fixed inset-0 bg-dark-gray bg-opacity-40 z-50'>
-            <div className="flex justify-center items-center min-h-screen mx-6">
+            <div className="flex justify-center items-center min-h-screen mx-4">
                 <div className="bg-white border border-gray p-8 rounded-lg shadow-2xl max-w-sm w-full">
                     <div className='flex flex-row justify-end items-center'>
                         <Button type='button' onPress={() => toggleCart()}>
