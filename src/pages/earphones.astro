@@ -8,7 +8,7 @@ import { NavigationMenu } from '../components/Menu';
 
 <Layout subtitle="Earphones">
 	<Header client:load />
-	<main class="container mb-8">
+	<main class="mb-8">
 		<section class="text-white bg-black py-8 mb-4">
 			<div class="flex flex-col justify-center items-center text-center px-6">
   				<h1 class="font-bold uppercase text-[36px] leading-[40px] tracking-[1.29px] mt-[8px] mb-[12px]">Earphones</h1>
@@ -24,7 +24,7 @@ import { NavigationMenu } from '../components/Menu';
 				client:visible 
 			/>
 		</section>
-		<section class="my-20">
+		<section class="my-24">
 			<NavigationMenu categories={['headphones', 'speakers', 'earphones']} client:visible />
 		</section>
 	</main>

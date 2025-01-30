@@ -42,7 +42,7 @@ selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as 
 
 <Layout subtitle={selectedProduct.name}>
 	<Header client:load />
-	<main class="container py-2 mb-8">
+	<main class="py-2 mb-8">
 		<div class="mx-6">
 			<NavigationButton method={NavigationMethod.Back} client:load>Back</NavigationButton>
 		</div>
@@ -68,7 +68,7 @@ selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as 
 				client:visible
 			/>
 		</section>
-		<section class="my-20">
+		<section class="my-24">
 			<NavigationMenu 
 				categories={['headphones', 'speakers', 'earphones']} 
 				client:visible 
