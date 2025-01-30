@@ -56,13 +56,13 @@ interface QuantitySelectionButtonGroupProps {
 
 export const QuantitySelectionButtonGroup: FC<QuantitySelectionButtonGroupProps> = ({ label, value, increment, decrement, isDisabled }) => {
     return (
-        <NumberField className='bg-light-gray'>
+        <NumberField className='bg-light-gray w-[120px] flex flex-row justify-evenly items-center py-3'>
             <Label className='sr-only'>{ label } </Label>
             <Group>
                 <Button 
                     slot='decrement' 
                     type='button' 
-                    className='w-3'
+                    className='w-3 text-[13px] tracking-[1px] opacity-25'
                     onPress={decrement}
                     isDisabled={isDisabled}
                 >
@@ -71,13 +71,13 @@ export const QuantitySelectionButtonGroup: FC<QuantitySelectionButtonGroupProps>
                 <Input
                     type='number' 
                     value={value} 
-                    className='w-12 bg-light-gray text-center cursor-pointer'
+                    className='w-12 text-[13px] tracking-[1px] bg-light-gray text-center cursor-pointer'
                     readOnly={true}
                 />
                 <Button 
                     slot='increment' 
                     type='button' 
-                    className='w-3'
+                    className='w-3 text-[13px] tracking-[1px] opacity-25'
                     onPress={increment}
                     isDisabled={isDisabled}
                 >
