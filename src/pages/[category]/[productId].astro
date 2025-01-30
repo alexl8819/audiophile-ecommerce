@@ -43,10 +43,10 @@ selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as 
 <Layout subtitle={selectedProduct.name}>
 	<Header client:load />
 	<main class="py-2 mb-8">
-		<div class="mx-6">
+		<div class="mx-8">
 			<NavigationButton method={NavigationMethod.Back} client:load>Back</NavigationButton>
 		</div>
-		<section class="my-12 mx-6">
+		<section class="my-12 mx-8">
             <ProductCard
                 isPreview={false}
                 name={selectedProduct.name}
@@ -62,13 +62,13 @@ selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as 
                 client:load         
             />
 		</section>
-		<section class="my-12 mx-6">
+		<section class="my-12 mx-8">
 			<RecommendedProductCard 
 				recommendations={selectedProduct.recommendations as Array<RecommendedProduct>}
 				client:visible
 			/>
 		</section>
-		<section class="my-24">
+		<section class="my-24 mx-8">
 			<NavigationMenu 
 				categories={['headphones', 'speakers', 'earphones']} 
 				client:visible 

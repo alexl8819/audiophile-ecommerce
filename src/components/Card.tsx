@@ -94,73 +94,74 @@ export const ProductCard: FC<ProductCardProps> = ({
 
     return (
         <div className={!isPreview ? 'text-left' : 'text-center'}>
-            <section className={!isPreview ? 'mb-11' : ''}>
-                <ProductShowcase name={name} path={`product-${productId}`} target={`image-${isPreview ? 'category-page-preview' : 'product'}`} />
-                {
-                    isNew && !isPreview ? (
-                        <p className='uppercase text-dim-orange text-[14px] tracking-[10px] my-3'>New product</p>
-                    ) : null
-                }
-                {
-                    isPreview ? (
-                        <p className='uppercase text-dim-orange text-[14px] tracking-[10px] my-3'>New product</p>
-                    ) : null
-                }
-			    <h2 className='font-bold uppercase text-[28px] tracking-[1px] my-3'>{ name }</h2>
-                <p className='font-medium text-[15px] leading-[25px] opacity-50 mt-3 mb-8'>{ description }</p>
-                {
-                    !isPreview && price ? (
-                        <>
-                            <p className='font-bold text-[18px] tracking-[1.29px]'>{ formatCurrency(price) }</p>
-                            <div className='flex flex-row justify-evenly items-center my-3'>
-                                <QuantitySelectionButtonGroup 
-                                    label='Quantity'
-                                    value={quantitySelected}
-                                    decrement={() => changeQuantity(quantitySelected - 1)}
-                                    increment={() => changeQuantity(quantitySelected + 1)}
-                                    isDisabled={availableQuantity === 0} 
-                                />
-                                <Button 
-                                    type='button' 
-                                    className='bg-dim-orange text-white py-3 px-8 font-bold uppercase text-[13px] tracking-[1px]'
-                                    isDisabled={availableQuantity === 0}
-                                    onPress={() => {
-                                        const success = addCartItem({
-                                            name,
-                                            price,
-                                            slug: productId,
-                                            quantity: quantitySelected
-                                        });
-                                        if (success) {
-                                            toast.success(`Added ${quantitySelected}x ${name} to cart`);
-                                        } else {
-                                            toast.error(`Quantity requested exceeds available supply`);
+            <section className={!isPreview ? 'flex flex-col md:flex-row mb-11' : ''}>
+                <div className='md:w-full md:h-full'>
+                    <ProductShowcase name={name} path={`product-${productId}`} target={`image-${isPreview ? 'category-page-preview' : 'product'}`} />
+                </div>
+                <div className='md:ml-2 flex flex-col md:px-16'>
+                    {
+                        isNew || isPreview ? (
+                            <p className='uppercase text-dim-orange text-[14px] tracking-[10px] my-3'>New product</p>
+                        ) : null
+                    }
+			        <h2 className='font-bold uppercase text-[28px] tracking-[1px] my-3'>{ name }</h2>
+                    <p className='font-medium text-[15px] leading-[25px] opacity-50 mt-3 mb-8'>{ description }</p>
+                    {
+                        !isPreview && price ? (
+                            <>
+                                <p className='font-bold text-[18px] tracking-[1.29px]'>{ formatCurrency(price) }</p>
+                                <div className='flex flex-row justify-start items-center my-6'>
+                                    <QuantitySelectionButtonGroup 
+                                        label='Quantity'
+                                        value={quantitySelected}
+                                        decrement={() => changeQuantity(quantitySelected - 1)}
+                                        increment={() => changeQuantity(quantitySelected + 1)}
+                                        isDisabled={availableQuantity === 0} 
+                                    />
+                                    <Button 
+                                        type='button' 
+                                        className='bg-dim-orange text-white py-3 px-8 font-bold uppercase text-[13px] tracking-[1px] ml-6 md:ml-8'
+                                        isDisabled={availableQuantity === 0}
+                                        onPress={() => {
+                                            const success = addCartItem({
+                                                name,
+                                                price,
+                                                slug: productId,
+                                                quantity: quantitySelected
+                                            });
+                                            if (success) {
+                                                toast.success(`Added ${quantitySelected}x ${name} to cart`);
+                                            } else {
+                                                toast.error(`Quantity requested exceeds available supply`);
+                                            }
+                                        }}
+                                    >
+                                        {
+                                            availableQuantity && availableQuantity <= 0? 'Out of Stock' : 'Add to Cart'
                                         }
-                                    }}
-                                >
-                                    {
-                                        availableQuantity && availableQuantity <= 0? 'Out of Stock' : 'Add to Cart'
-                                    }
-                                </Button>
+                                    </Button>
+                                </div>
+                            </>
+                        ) : null
+                    }
+			        {
+                        isPreview ? (
+                            <div className='flex flex-col items-center w-full'>
+                                <Link href={`/${category}/${productId}`} className="bg-dim-orange text-white py-3 px-8 font-bold uppercase text-[13px] w-40">See product</Link>
                             </div>
-                        </>
-                    ) : null
-                }
-			    {
-                    isPreview ? (
-                        <Link href={`/${category}/${productId}`} className="bg-dim-orange text-white py-3 px-8 font-bold uppercase text-[13px]">See product</Link>
-                    ) : null
-                }
+                        ) : null
+                    }
+                </div>
             </section>
             {
                 !isPreview ? (
                     <>
                         <section className='mt-11'>
-                            <h2 className='font-bold uppercase text-[24px] leading-[36px] mb-6'>Features</h2>
+                            <h2 className='font-bold uppercase text-[24px] md:text-[32px] leading-[36px] md:tracking-[1.14px] mb-6'>Features</h2>
                             <p className='font-medium text-pretty whitespace-pre-line text-[15px] leading-[25px] opacity-50'>{ features }</p>
                         </section>
-                        <section className='mt-20'>
-                            <h2 className='font-bold uppercase text-[24px] leading-[36px] mb-6'>In the box</h2>
+                        <section className='mt-20 flex flex-col md:flex-row md:justify-between md:w-[549px]'>
+                            <h2 className='font-bold uppercase text-[24px] md:text-[32px] leading-[36px] mb-6'>In the box</h2>
                             <ol className='list-none'>
                             {
                                 includes ? includes.map((include: Item, index: number) => (
@@ -173,10 +174,10 @@ export const ProductCard: FC<ProductCardProps> = ({
                             </ol>
                         </section>
                         <section className='mt-[88px]'>
-                            <ol className='list-none'>
+                            <ol className='list-none md:grid grid-rows-2 grid-flow-col items-end gap-5'>
                                 {
                                     Array.from({length: galleryImages || 3 }).map((_, index: number) => (
-                                        <li key={index}>
+                                        <li className={index === 2 ? 'row-span-2 col-span-3' : `${index === 1 ? 'row-start-2' : 'row-span-1'} col-span-2`} key={index}>
                                             <ProductShowcase
                                                 name={name} 
                                                 path={`product-${productId}`} 
@@ -202,13 +203,15 @@ interface RecommendedProductCardProps {
 
 export const RecommendedProductCard: FC<RecommendedProductCardProps> = ({ recommendations }) => {
     return (
-        <section className='text-center'>
-            <h2 className='uppercase font-bold text-[24px] leading-[36px] tracking-[0.86px]'>You may also like</h2>
-            <ol className='list-none'>
+        <section className='text-center md:mb-[120px]'>
+            <h2 className='uppercase font-bold text-[24px] md:text-[32px] leading-[36px] tracking-[0.86px] mb-7 md:mb-14'>You may also like</h2>
+            <ol className='list-none flex flex-col md:flex-row md:justify-evenly md:items-center'>
                 {
                     recommendations.map((product: RecommendedProduct, index: number) => (
-                        <li key={index} className='my-16'>
-                            <ProductShowcase name={product.name} path='shared' target={`image-${product.slug}`} />
+                        <li key={index} className='my-12 md:my-0 md:max-w-60'>
+                            <div className='md:w-56 h-auto'>
+                                <ProductShowcase name={product.name} path='shared' target={`image-${product.slug}`} />
+                            </div>
                             <h3 className='truncate font-bold uppercase text-[24px] tracking-[1.71px] mb-8'>{ product.name }</h3>
                             <Link
                                 className='bg-dim-orange text-white py-3 px-8 uppercase font-bold text-[13px] tracking-[1px]'
