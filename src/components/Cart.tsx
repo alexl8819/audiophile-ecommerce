@@ -66,7 +66,7 @@ export const Cart: FC<CartProps> = ({ items }) => {
 
     return (
         <div className='fixed inset-0 bg-dark-gray bg-opacity-40 z-50'>
-            <div className="flex justify-center md:justify-end items-center md:items-start md:pt-20 min-h-screen mx-4">
+            <div className="flex justify-center md:justify-end items-center md:items-start md:pt-20 md:pr-2 min-h-screen mx-4">
                 <div className="bg-white border border-gray p-8 rounded-lg shadow-2xl max-w-sm w-full">
                     <div className='flex flex-row justify-end items-center'>
                         <Button type='button' onPress={() => toggleCart()}>
