@@ -112,7 +112,7 @@ export const NavigationButton: FC<NavigationButtonProps> = ({ method, children }
     }, []);
 
     return (
-        <Button onPress={handleNav}>
+        <Button onPress={handleNav} className='opacity-50'>
             { children }
         </Button>
     );
