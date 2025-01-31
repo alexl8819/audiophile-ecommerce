@@ -10,12 +10,12 @@ const amountDue = 2000;
 ---
 <Layout subtitle="Checkout">
 	<Header client:load />
-	<main class="mb-8">
-		<div class="mt-2 mx-8">
+	<main class="mb-[116px]">
+		<div class="mt-2 mx-6">
 			<NavigationButton method={NavigationMethod.Back} client:load>Back</NavigationButton>
 		</div>
-		<section class="my-4 mx-8">
-			<h1 class="uppercase font-bold text-[28px] tracking-[1px] mb-8">Checkout</h1>
+		<section class="my-4 mx-6">
+			<h1 class="uppercase font-bold text-[28px] tracking-[1px] mb-8 mx-8">Checkout</h1>
 			<CheckoutPreview amountDue={amountDue} shippingCost={amountDue * FLAT_SHIPPING_RATE} client:load />
 		</section>
 	</main>
@@ -24,5 +24,5 @@ const amountDue = 2000;
 		{ name: 'Headphones', url: '/headphones' }, 
 		{ name: 'Speakers', url: '/speakers' }, 
 		{ name: 'Earphones', url: '/earphones' }
-	]} />
+	]} showAbout={false} />
 </Layout>
