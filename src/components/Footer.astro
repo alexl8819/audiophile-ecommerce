@@ -16,30 +16,34 @@ interface NavLink {
     url: string
 }
 
-const { navLinks } = Astro.props;
+const { navLinks, showAbout = true } = Astro.props;
 ---
 <footer class="w-full">
-    <section class="flex flex-col justify-center items-center text-black bg-white">
-        <div class="mx-8 mb-[120px]">
-            <figure class="h-[300px] overflow-hidden mb-[20px] md:mb-16">
-                <picture>
-                    <source srcset={bestGearMobile.src} media="(max-width: 767px)">
-                    <source srcset={bestGearTablet.src} media="(max-width: 1023px)">
-                    <source srcset={bestGearDeskop.src} media="(min-width: 1024px)">
-                    <Image src={bestGearMobile} class="object-center object-cover aspect-square w-full h-full rounded-md" alt="man with headphones" loading="lazy" /> 
-                </picture>
-            </figure>
-            <div class="md:px-28">
-                <h2 class="font-bold uppercase text-center text-[28px] md:text-[40px] md:leading-[44px] tracking-[1px] mt-[20px]">Bringing you the <span class="text-dim-orange">best</span> audio gear</h2>
-                <p class="font-medium text-center text-[15px] leading-[25px] opacity-50 mt-8 md:px-2">
-                    Located at the heart of New York City, Audiophile is the premier store for high end headphones, 
-                    earphones, speakers, and audio accessories. We have a large showroom and luxury demonstration 
-                    rooms available for you to browse and experience a wide range of our products. Stop by our store 
-                    to meet some of the fantastic people who make Audiophile the best place to buy your portable audio equipment.
-                </p>
-            </div>
-        </div>
-    </section>
+    {
+        !showAbout ? null : (
+            <section class="flex flex-col justify-center items-center text-black bg-white">
+                <div class="mx-8 mb-[120px]">
+                    <figure class="h-[300px] overflow-hidden mb-[20px] md:mb-16">
+                        <picture>
+                            <source srcset={bestGearMobile.src} media="(max-width: 767px)">
+                            <source srcset={bestGearTablet.src} media="(max-width: 1023px)">
+                            <source srcset={bestGearDeskop.src} media="(min-width: 1024px)">
+                            <Image src={bestGearMobile} class="object-center object-cover aspect-square w-full h-full rounded-md" alt="man with headphones" loading="lazy" /> 
+                        </picture>
+                    </figure>
+                    <div class="md:px-28">
+                        <h2 class="font-bold uppercase text-center text-[28px] md:text-[40px] md:leading-[44px] tracking-[1px] mt-[20px]">Bringing you the <span class="text-dim-orange">best</span> audio gear</h2>
+                        <p class="font-medium text-center text-[15px] leading-[25px] opacity-50 mt-8 md:px-2">
+                            Located at the heart of New York City, Audiophile is the premier store for high end headphones, 
+                            earphones, speakers, and audio accessories. We have a large showroom and luxury demonstration 
+                            rooms available for you to browse and experience a wide range of our products. Stop by our store 
+                            to meet some of the fantastic people who make Audiophile the best place to buy your portable audio equipment.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        ) 
+    }
     <section class="flex flex-col justify-center items-center px-8 md:px-12 text-white bg-black">
         <div class="flex flex-col items-center md:items-start w-full">
             <div class="w-[6.3125rem] h-1 bg-dim-orange"></div>
