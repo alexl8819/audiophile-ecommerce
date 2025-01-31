@@ -63,91 +63,95 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
     });
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)} className='mx-8'>
             <h2 className='uppercase font-bold text-dim-orange text-[13px] leading-[25px] mb-4'>Billing Details</h2>
-            <Controller 
-                control={control}
-                name='name'
-                rules={{ required: 'Name is required.' }}
-                render={({
-                    field: { name, value, onChange, onBlur, ref },
-                    fieldState: { invalid, error }
-                }) => (
-                    <TextField 
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        isRequired
-                        validationBehavior="aria"
-                        isInvalid={invalid}
-                        className='flex flex-col mb-3'
-                    >
-                        <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Name</Label>
-                        <Input 
-                            ref={ref} 
-                            className='border border-lighter-gray py-3 px-6 rounded-lg' 
-                            placeholder='John Smith'
-                        />
-                    </TextField>
-                )}
-            />
-            <Controller 
-                control={control}
-                name='email'
-                rules={{ required: 'Email is required.' }}
-                render={({
-                    field: { name, value, onChange, onBlur, ref },
-                    fieldState: { invalid, error }
-                }) => (
-                    <TextField 
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        isRequired
-                        validationBehavior="aria"
-                        isInvalid={invalid}
-                        className='flex flex-col my-3'
-                    >
-                        <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Email</Label>
-                        <Input 
-                            type='email' 
-                            ref={ref} 
-                            className='border border-lighter-gray py-3 px-6 rounded-lg' 
-                            placeholder='johnsmith@gmail.com'
-                        />
-                    </TextField>
-                )}
-            />
-            <Controller 
-                control={control}
-                name='phone'
-                rules={{ required: 'Phone is required.' }}
-                render={({
-                    field: { name, value, onChange, onBlur, ref },
-                    fieldState: { invalid, error }
-                }) => (
-                    <TextField 
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        isRequired
-                        validationBehavior="aria"
-                        isInvalid={invalid}
-                        className='flex flex-col mt-3'
-                    >
-                        <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Phone</Label>
-                        <Input 
-                            type='tel' 
-                            ref={ref} 
-                            className='border border-lighter-gray py-3 px-6 rounded-lg' 
-                            placeholder='555-555-5555'
-                        />
-                    </TextField>
-                )}
-            />
+            <div className='flex flex-col'>
+                <div className='flex flex-col md:flex-row md:justify-evenly md:space-x-4 md:mb-4'>
+                    <Controller 
+                        control={control}
+                        name='name'
+                        rules={{ required: 'Name is required.' }}
+                        render={({
+                            field: { name, value, onChange, onBlur, ref },
+                            fieldState: { invalid, error }
+                        }) => (
+                            <TextField 
+                                name={name}
+                                value={value}
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                isRequired
+                                validationBehavior="aria"
+                                isInvalid={invalid}
+                                className='flex flex-col mb-3 md:mb-0 w-full'
+                            >
+                                <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Name</Label>
+                                <Input 
+                                    ref={ref} 
+                                    className='border border-lighter-gray py-3 px-6 rounded-lg' 
+                                    placeholder='John Smith'
+                                />
+                            </TextField>
+                        )}
+                    />
+                    <Controller 
+                        control={control}
+                        name='email'
+                        rules={{ required: 'Email is required.' }}
+                        render={({
+                            field: { name, value, onChange, onBlur, ref },
+                            fieldState: { invalid, error }
+                        }) => (
+                            <TextField 
+                                name={name}
+                                value={value}
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                isRequired
+                                validationBehavior="aria"
+                                isInvalid={invalid}
+                                className='flex flex-col my-3 md:my-0 w-full'
+                            >
+                                <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Email</Label>
+                                <Input 
+                                    type='email' 
+                                    ref={ref} 
+                                    className='border border-lighter-gray py-3 px-6 rounded-lg' 
+                                    placeholder='johnsmith@gmail.com'
+                                />
+                            </TextField>
+                        )}
+                    />
+                </div>
+                <Controller 
+                    control={control}
+                    name='phone'
+                    rules={{ required: 'Phone is required.' }}
+                    render={({
+                        field: { name, value, onChange, onBlur, ref },
+                        fieldState: { invalid, error }
+                    }) => (
+                        <TextField 
+                            name={name}
+                            value={value}
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            isRequired
+                            validationBehavior="aria"
+                            isInvalid={invalid}
+                            className='flex flex-col mt-3 md:mt-0 md:w-1/2 md:pr-2'
+                        >
+                            <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Phone</Label>
+                            <Input 
+                                type='tel' 
+                                ref={ref} 
+                                className='border border-lighter-gray py-3 px-6 rounded-lg' 
+                                placeholder='555-555-5555'
+                            />
+                        </TextField>
+                    )}
+                />
+            </div>
             <h2 className='uppercase font-bold text-dim-orange text-[13px] leading-[25px] my-4'>Shipping Info</h2>
             <Controller 
                 control={control}
@@ -177,62 +181,65 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                     </TextField>
                 )}
             />
-            <Controller 
-                control={control}
-                name='zipcode'
-                rules={{ required: 'Zipcode is required.' }}
-                render={({
-                    field: { name, value, onChange, onBlur, ref },
-                    fieldState: { invalid, error }
-                }) => (
-                    <TextField 
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        isRequired
-                        validationBehavior="aria"
-                        isInvalid={invalid}
-                        className='flex flex-col mb-3'
-                    >
-                        <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>ZIP code</Label>
-                        <Input 
-                            type='text' 
-                            ref={ref}
-                            className='border border-lighter-gray py-3 px-6 rounded-lg'
-                            placeholder='10001' 
-                        />
-                    </TextField>
-                )}
-            />
-            <Controller 
-                control={control}
-                name='city'
-                rules={{ required: 'City is required.' }}
-                render={({
-                    field: { name, value, onChange, onBlur, ref },
-                    fieldState: { invalid, error }
-                }) => (
-                    <TextField 
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        isRequired
-                        validationBehavior="aria"
-                        isInvalid={invalid}
-                        className='flex flex-col mb-3'
-                    >
-                        <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>City</Label>
-                        <Input 
-                            type='text' 
-                            ref={ref} 
-                            className='border border-lighter-gray py-3 px-6 rounded-lg'
-                            placeholder='New York' 
-                        />
-                    </TextField>
-                )}
-            />
+            <div className='flex flex-col'>
+                <div className='flex flex-col md:flex-row md:justify-evenly md:space-x-4 md:mb-4'>
+                    <Controller 
+                        control={control}
+                        name='zipcode'
+                        rules={{ required: 'Zipcode is required.' }}
+                        render={({
+                            field: { name, value, onChange, onBlur, ref },
+                            fieldState: { invalid, error }
+                        }) => (
+                            <TextField 
+                                name={name}
+                                value={value}
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                isRequired
+                                validationBehavior="aria"
+                                isInvalid={invalid}
+                                className='flex flex-col mb-3 md:mb-0 w-full'
+                            >
+                                <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>ZIP code</Label>
+                                <Input 
+                                    type='text' 
+                                    ref={ref}
+                                    className='border border-lighter-gray py-3 px-6 rounded-lg'
+                                    placeholder='10001' 
+                                />
+                            </TextField>
+                        )}
+                    />
+                    <Controller 
+                        control={control}
+                        name='city'
+                        rules={{ required: 'City is required.' }}
+                        render={({
+                            field: { name, value, onChange, onBlur, ref },
+                            fieldState: { invalid, error }
+                        }) => (
+                            <TextField 
+                                name={name}
+                                value={value}
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                isRequired
+                                validationBehavior="aria"
+                                isInvalid={invalid}
+                                className='flex flex-col mb-3 md:mb-0 w-full'
+                            >
+                                <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>City</Label>
+                                <Input 
+                                    type='text' 
+                                    ref={ref} 
+                                    className='border border-lighter-gray py-3 px-6 rounded-lg'
+                                    placeholder='New York' 
+                                />
+                            </TextField>
+                        )}
+                    />
+            </div>
             <Controller 
                 control={control}
                 name='country'
@@ -242,7 +249,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                         <Label htmlFor={field.name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Country</Label>
                         <Select
                             {...field}
-                            className="pt-2"
+                            className="pt-2 md:mt-0 md:w-1/2 md:pr-2"
                             styles={{
                                 control: (styles) => ({ ...styles, ...dot() }),
                             }}
@@ -260,8 +267,8 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                         />
                     </>
                 )}
-               
             />
+            </div>
             <h2 className='uppercase font-bold text-dim-orange text-[13px] leading-[25px] my-4'>Payment Details</h2>
             {/*<Controller 
                 control={control}

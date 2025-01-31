@@ -122,12 +122,14 @@ interface CartSummaryItemProps {
 
 export const CartSummaryItem: FC<CartSummaryItemProps> = ({ item }) => (
     <div className='flex flex-row justify-between items-center my-4'>
-        <div className='w-16'>
-            <ProductShowcase name={item.name} path='cart' target={`image-${item.slug}`} responsive={false} />
-        </div>
-        <div className='flex flex-col w-56'>
-            <p className='truncate uppercase font-bold text-[15px] leading-[25px]'>{ item.name }</p>
-            <p className='font-bold text-[14px] leading-[25px] opacity-50'>{ formatCurrency(item.price) }</p>
+        <div className='flex flex-row justify-evenly md:justify-between items-center w-full md:w-auto'>
+            <div className='w-16'>
+                <ProductShowcase name={item.name} path='cart' target={`image-${item.slug}`} responsive={false} />
+            </div>
+            <div className='flex flex-col w-36 md:w-auto ml-5 md:ml-4'>
+                <p className='truncate uppercase font-bold text-[15px] leading-[25px]'>{ item.name }</p>
+                <p className='font-bold text-[14px] leading-[25px] opacity-50'>{ formatCurrency(item.price) }</p>
+            </div>
         </div>
         <div className='w-auto'>
             <span className='font-bold text-[15px] leading-[25px] opacity-50'>x{ item.quantity }</span>
@@ -189,7 +191,7 @@ export const CartSummary: FC<CartSummaryProps> = memo(({ items, shippingFee, vat
             }
             <div className='flex flex-row justify-between items-center mt-8'>
                 <span className='uppercase font-medium leading-[25px] opacity-50'>Total</span>
-                <span className='font-bold text-[18px]'>{ formatCurrency(grandTotal) }</span>
+                <span className='font-bold text-[18px] text-dim-orange'>{ formatCurrency(grandTotal) }</span>
             </div>
         </div>
     );
