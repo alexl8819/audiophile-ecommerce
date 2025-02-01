@@ -9,7 +9,12 @@ import { FLAT_SHIPPING_RATE } from '../lib/constants';
 const amountDue = 2000;
 ---
 <Layout subtitle="Checkout">
-	<Header client:load />
+	<Header navLinks={[
+		{ name: 'Home', url: '/' }, 
+		{ name: 'Headphones', url: '/headphones' }, 
+		{ name: 'Speakers', url: '/speakers' }, 
+		{ name: 'Earphones', url: '/earphones' }
+	]} client:load />
 	<main class="mb-[116px]">
 		<div class="mt-2 mx-6">
 			<NavigationButton method={NavigationMethod.Back} client:load>Back</NavigationButton>

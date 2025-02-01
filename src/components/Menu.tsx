@@ -12,7 +12,7 @@ export const NavigationMenu: FC<NavigationMenuProps> = ({ categories }) => {
             {
                 categories.map((category: string, index: number) => (
                     <li key={index} className="mx-6 md:mx-[10px] md:w-full">
-				        <CategoryProductCard category={category} url={`/${category}`} />
+				        <CategoryProductCard category={category.toLowerCase()} url={`/${category.toLowerCase()}`} />
 			        </li>
                 ))
             }

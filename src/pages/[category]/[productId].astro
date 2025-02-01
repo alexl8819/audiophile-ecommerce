@@ -41,7 +41,12 @@ selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as 
 ---
 
 <Layout subtitle={selectedProduct.name}>
-	<Header client:load />
+	<Header navLinks={[
+		{ name: 'Home', url: '/' }, 
+		{ name: 'Headphones', url: '/headphones' }, 
+		{ name: 'Speakers', url: '/speakers' }, 
+		{ name: 'Earphones', url: '/earphones' }
+	]} client:load />
 	<main class="py-2 mb-8">
 		<div class="mx-8">
 			<NavigationButton method={NavigationMethod.Back} client:load>Back</NavigationButton>

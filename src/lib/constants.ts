@@ -1,3 +1,8 @@
+export interface NavLink {
+    name: string
+    url: string
+}
+
 export interface Item {
     quantity: number
     item: string
