@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { Link } from 'react-aria-components';
+import { type NavLink } from '../lib/constants';
 
 import logo from '../assets/shared/desktop/logo.svg';
 import bestGearMobile from '../assets/shared/mobile/image-best-gear.jpg';
@@ -10,11 +11,6 @@ import bestGearDeskop from '../assets/shared/desktop/image-best-gear.jpg';
 import iconFacebook from '../assets/shared/desktop/icon-facebook.svg';
 import iconInstagram from '../assets/shared/desktop/icon-instagram.svg';
 import iconTwitter from '../assets/shared/desktop/icon-twitter.svg';
-
-interface NavLink {
-    name: string
-    url: string
-}
 
 const { navLinks, showAbout = true } = Astro.props;
 ---
