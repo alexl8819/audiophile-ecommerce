@@ -34,7 +34,7 @@ export const Header: FC<HeaderProps> = ({ navLinks, styles }) => {
                         <StyledIconButton iconName="icon-hamburger" viewportModifier="tablet" altText="navbar icon" onPress={() => toggleNav()} />
                     </div>
                     <Link href="/"><img src={logo.src} alt="Audiophile Logo" loading="eager" /></Link>
-                    <div className='w-auto lg:w-[429px] lg:mr-4'>
+                    <div className='w-auto lg:w-[429px] lg:mr-6'>
                         <Navbar isOpen={open} navLinks={navLinks} />
                     </div>
                 </div>
