@@ -46,8 +46,8 @@ selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as 
 		{ name: 'Headphones', url: '/headphones' }, 
 		{ name: 'Speakers', url: '/speakers' }, 
 		{ name: 'Earphones', url: '/earphones' }
-	]} client:load />
-	<main class="py-2 mb-8">
+	]} styles={{ backgroundColor: 'bg-black' }} client:load />
+	<main class="pt-24 md:pt-28 pb-2 mb-8">
 		<div class="mx-8">
 			<NavigationButton method={NavigationMethod.Back} client:load>Back</NavigationButton>
 		</div>
