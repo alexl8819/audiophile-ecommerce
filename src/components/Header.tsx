@@ -11,19 +11,24 @@ import { Cart } from "./Cart";
 import { useStore } from "@nanostores/react";
 import type { NavLink } from "../lib/constants";
 
-interface HeaderProps {
-    navLinks: Array<NavLink>
+interface HeaderStyles {
+    backgroundColor: string
 }
 
-export const Header: FC<HeaderProps> = ({ navLinks }) => {
+interface HeaderProps {
+    navLinks: Array<NavLink>
+    styles?: HeaderStyles
+}
+
+export const Header: FC<HeaderProps> = ({ navLinks, styles }) => {
     const [open, setOpen] = useState<boolean>(false);
     const items = useStore(cartItems);
     
     const toggleNav = () => setOpen(open ? false : true);
 
     return (
-        <header className='flex flex-col bg-transparent absolute top-0 w-full'>
-            <div className='flex flex-row justify-evenly md:justify-between items-center px-8 lg:px-12 py-6 md:py-8'>
+        <header className={`flex flex-col ${ styles && styles.backgroundColor ? styles.backgroundColor : 'bg-transparent' } absolute top-0 w-full`}>
+            <div className='flex flex-row justify-evenly md:justify-between items-center px-8 md:px-12 lg:px-16 py-6 md:py-8'>
                 <div className="flex flex-row justify-between items-center w-full md:w-56 lg:w-full">
                     <div className='lg:hidden'>
                         <StyledIconButton iconName="icon-hamburger" viewportModifier="tablet" altText="navbar icon" onPress={() => toggleNav()} />
@@ -38,7 +43,7 @@ export const Header: FC<HeaderProps> = ({ navLinks }) => {
                     <Cart items={items} />
                 </div>
             </div>
-            <div className='h-2 md:mx-12 border-b border-b-light-gray opacity-20'></div>
+            <div className='h-2 md:mx-12 lg:mx-16 border-b border-b-light-gray opacity-20'></div>
         </header>
     )
 }
