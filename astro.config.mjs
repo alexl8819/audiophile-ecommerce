@@ -16,5 +16,8 @@ export default defineConfig({
   integrations: [sitemap(), tailwind(), react(), db()],
   adapter: vercel(),
   output: 'server',
-  prefetch: true
+  prefetch: true,
+  experimental: {
+      svg: true,
+  },
 });

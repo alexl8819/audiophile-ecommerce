@@ -8,9 +8,9 @@ import bestGearMobile from '../assets/shared/mobile/image-best-gear.jpg';
 import bestGearTablet from '../assets/shared/tablet/image-best-gear.jpg';
 import bestGearDeskop from '../assets/shared/desktop/image-best-gear.jpg';
 
-import iconFacebook from '../assets/shared/desktop/icon-facebook.svg';
-import iconInstagram from '../assets/shared/desktop/icon-instagram.svg';
-import iconTwitter from '../assets/shared/desktop/icon-twitter.svg';
+import FacebookIcon from '../assets/shared/desktop/icon-facebook.svg';
+import InstagramIcon from '../assets/shared/desktop/icon-instagram.svg';
+import TwitterIcon from '../assets/shared/desktop/icon-twitter.svg';
 
 const { navLinks, showAbout = true } = Astro.props;
 ---
@@ -18,8 +18,8 @@ const { navLinks, showAbout = true } = Astro.props;
     {
         !showAbout ? null : (
             <section class="flex flex-col justify-center items-center text-black bg-white">
-                <div class="mx-8 mb-[120px]">
-                    <figure class="h-[300px] overflow-hidden mb-[20px] md:mb-16">
+                <div class="flex flex-col lg:flex-row-reverse items-center lg:h-[588px] mx-8 lg:mx-40 mb-[120px]">
+                    <figure class="h-[300px] lg:h-full w-full lg:w-auto overflow-hidden mb-[20px] md:mb-16 lg:mb-0">
                         <picture>
                             <source srcset={bestGearMobile.src} media="(max-width: 767px)">
                             <source srcset={bestGearTablet.src} media="(max-width: 1023px)">
@@ -27,9 +27,9 @@ const { navLinks, showAbout = true } = Astro.props;
                             <Image src={bestGearMobile} class="object-center object-cover aspect-square w-full h-full rounded-md" alt="man with headphones" loading="lazy" /> 
                         </picture>
                     </figure>
-                    <div class="md:px-28">
-                        <h2 class="font-bold uppercase text-center text-[28px] md:text-[40px] md:leading-[44px] tracking-[1px] mt-[20px]">Bringing you the <span class="text-dim-orange">best</span> audio gear</h2>
-                        <p class="font-medium text-center text-[15px] leading-[25px] opacity-50 mt-8 md:px-2">
+                    <div class="lg:w-1/2 md:px-28 lg:px-0 lg:pr-40 text-center lg:text-left">
+                        <h2 class="font-bold uppercase text-[28px] md:text-[40px] md:leading-[44px] tracking-[1px] mt-[20px] lg:mt-0">Bringing you the <span class="text-dim-orange">best</span> audio gear</h2>
+                        <p class="font-medium text-[15px] leading-[25px] opacity-50 mt-8 md:px-2 lg:px-0">
                             Located at the heart of New York City, Audiophile is the premier store for high end headphones, 
                             earphones, speakers, and audio accessories. We have a large showroom and luxury demonstration 
                             rooms available for you to browse and experience a wide range of our products. Stop by our store 
@@ -40,44 +40,46 @@ const { navLinks, showAbout = true } = Astro.props;
             </section>
         ) 
     }
-    <section class="flex flex-col justify-center items-center px-8 md:px-12 text-white bg-black">
+    <section class="flex flex-col justify-center items-center px-8 md:px-12 lg:px-40 text-white bg-black">
         <div class="flex flex-col items-center md:items-start w-full">
             <div class="w-[6.3125rem] h-1 bg-dim-orange"></div>
-            <div class="flex flex-col items-center md:items-start my-10 w-full">
+            <div class="flex flex-col lg:flex-row lg:justify-between items-center md:items-start my-10 w-full">
                 <Image src={logo} alt="main site logo" loading='lazy' />
-                <nav class="mt-8">
+                <nav class="mt-8 lg:mt-0">
                     <ol class="list-none flex flex-col justify-center md:justify-start items-center md:flex-row space-y-4 md:space-y-0 md:space-x-4">
                         {
                             navLinks.map((navLink: NavLink) => (
-                                <Link href={navLink.url} className='font-bold text-[13px] tracking-[2px] leading-[25px] uppercase'>{ navLink.name }</Link>
+                                <Link href={navLink.url} className='font-bold text-[13px] tracking-[2px] leading-[25px] uppercase hover:text-dim-orange'>
+                                    { navLink.name }
+                                </Link>
                             ))
                         }
                     </ol>
                 </nav>
             </div>
         </div>
-        <div class="flex flex-col items-center">
-            <p class="text-center md:text-left font-medium text-[15px] leading-[25px] tracking-normal md:mb-20 opacity-50">
+        <div class="flex flex-col w-full">
+            <p class="text-center md:text-left font-medium text-[15px] leading-[25px] tracking-normal opacity-50 md:mb-20 lg:mb-0 w-full lg:w-[540px]">
                 Audiophile is an all in one stop to fulfill your audio needs. We're a small team of music lovers 
                 and sound specialists who are devoted to helping you get the most out of personal audio. Come and 
                 visit our demo facility - we’re open 7 days a week.
             </p>
-            <div class="flex flex-col md:flex-row justify-center md:justify-between items-center w-full">
-                <p class="text-center my-8 font-bold text-[15px] leading-[25px] tracking-normal opacity-50">Copyright { new Date().getFullYear() }. All rights reserved</p>
-                <ol class="list-none flex flex-row justify-evenly items-center space-x-2 w-[101px]">
+            <div class="flex flex-col md:flex-row md:justify-between w-full">
+                <p class="text-center md:text-left my-8 font-bold text-[15px] leading-[25px] tracking-normal opacity-50">Copyright { new Date().getFullYear() }. All rights reserved</p>
+                <ol class="list-none flex flex-row justify-evenly items-center space-x-2 w-[101px] lg:-mt-32">
                     <li>
-                        <Link href="#facebook" target="_blank">
-                            <Image src={iconFacebook} alt="facebook social media link" loading="lazy" />
+                        <Link href="#facebook" className="fill-dim-orange" target="_blank">
+                            <FacebookIcon />
                         </Link>
                     </li>
                     <li>
                         <Link href="#twitter" target="_blank">
-                            <Image src={iconTwitter} alt="" loading="lazy" />
+                            <TwitterIcon class="hover:fill-dim-orange" />
                         </Link>
                     </li>
                     <li>
                         <Link href="#instagram" target="_blank">
-                            <Image src={iconInstagram} alt="" loading="lazy" />
+                            <InstagramIcon class="hover:fill-dim-orange" />
                         </Link>
                     </li>
                 </ol>

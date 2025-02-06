@@ -28,7 +28,7 @@ export const Header: FC<HeaderProps> = ({ navLinks, styles }) => {
 
     return (
         <header className={`flex flex-col ${ styles && styles.backgroundColor ? styles.backgroundColor : 'bg-transparent' } absolute top-0 w-full`}>
-            <div className='flex flex-row justify-evenly md:justify-between items-center px-8 md:px-12 lg:px-16 py-6 md:py-8'>
+            <div className='flex flex-row justify-evenly md:justify-between items-center px-8 md:px-12 lg:px-40 py-6 md:py-8'>
                 <div className="flex flex-row justify-between items-center w-full md:w-56 lg:w-full">
                     <div className='lg:hidden'>
                         <StyledIconButton iconName="icon-hamburger" viewportModifier="tablet" altText="navbar icon" onPress={() => toggleNav()} />
@@ -43,7 +43,7 @@ export const Header: FC<HeaderProps> = ({ navLinks, styles }) => {
                     <Cart items={items} />
                 </div>
             </div>
-            <div className='h-2 md:mx-12 lg:mx-16 border-b border-b-light-gray opacity-20'></div>
+            <div className='h-2 md:mx-12 lg:mx-40 border-b border-b-light-gray opacity-20'></div>
         </header>
     )
 }
