@@ -63,7 +63,7 @@ export const QuantitySelectionButtonGroup: FC<QuantitySelectionButtonGroupProps>
                 <Button 
                     slot='decrement' 
                     type='button' 
-                    className='w-3 text-[13px] tracking-[1px] opacity-25'
+                    className='w-3 text-[13px] tracking-[1px] opacity-25 hover:opacity-100'
                     onPress={decrement}
                     isDisabled={isDisabled}
                 >
@@ -78,7 +78,7 @@ export const QuantitySelectionButtonGroup: FC<QuantitySelectionButtonGroupProps>
                 <Button 
                     slot='increment' 
                     type='button' 
-                    className='w-3 text-[13px] tracking-[1px] opacity-25'
+                    className='w-3 text-[13px] tracking-[1px] opacity-25 hover:opacity-100'
                     onPress={increment}
                     isDisabled={isDisabled}
                 >

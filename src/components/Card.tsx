@@ -99,7 +99,7 @@ export const ProductCard: FC<ProductCardProps> = ({
                 <div className='md:w-full lg:w-1/2 md:h-full'>
                     <ProductShowcase name={name} path={`product-${productId}`} target={`image-${isPreview ? 'category-page-preview' : 'product'}`} />
                 </div>
-                <div className='md:ml-2 flex flex-col md:px-16 lg:px-28 lg:w-1/2'>
+                <div className='md:ml-2 flex flex-col md:px-16 lg:w-1/2'>
                     {
                         isNew || isPreview ? (
                             <p className='uppercase text-dim-orange text-[14px] tracking-[10px] my-3'>New product</p>
@@ -121,7 +121,7 @@ export const ProductCard: FC<ProductCardProps> = ({
                                     />
                                     <Button 
                                         type='button' 
-                                        className='bg-dim-orange text-white py-3 px-8 font-bold uppercase text-[13px] tracking-[1px] ml-6 md:ml-8'
+                                        className='bg-dim-orange hover:opacity-80 text-white py-3 px-8 font-bold uppercase text-[13px] tracking-[1px] ml-6 md:ml-8'
                                         isDisabled={availableQuantity === 0}
                                         onPress={() => {
                                             const success = addCartItem({
@@ -157,22 +157,24 @@ export const ProductCard: FC<ProductCardProps> = ({
             {
                 !isPreview ? (
                     <>
-                        <section className='mt-11'>
-                            <h2 className='font-bold uppercase text-[24px] md:text-[32px] leading-[36px] md:tracking-[1.14px] mb-6'>Features</h2>
-                            <p className='font-medium text-pretty whitespace-pre-line text-[15px] leading-[25px] opacity-50'>{ features }</p>
-                        </section>
-                        <section className='mt-20 flex flex-col md:flex-row md:justify-between md:w-[549px]'>
-                            <h2 className='font-bold uppercase text-[24px] md:text-[32px] leading-[36px] mb-6'>In the box</h2>
-                            <ol className='list-none'>
-                            {
-                                includes ? includes.map((include: Item, index: number) => (
-                                    <li key={index} className='flex flex-row items-start mb-2 last:mb-0'>
-                                        <span className='font-bold text-dim-orange text-[15px] leading-[25px] w-1'>{ include.quantity }x</span>
-                                        <span className='ml-10 font-medium text-[15px] leading-[25px] opacity-50'>{ include.item }</span>
-                                    </li>
-                                )) : null
-                            }
-                            </ol>
+                        <section className='flex flex-col lg:flex-row'>
+                            <div className='mt-11 lg:mt-0 lg:w-3/5 lg:mr-16'>
+                                <h2 className='font-bold uppercase text-[24px] md:text-[32px] leading-[36px] md:tracking-[1.14px] mb-6'>Features</h2>
+                                <p className='font-medium text-pretty whitespace-pre-line text-[15px] leading-[25px] opacity-50'>{ features }</p>
+                            </div>
+                            <div className='mt-20 lg:mt-0 lg:ml-16 flex flex-col md:flex-row lg:flex-col md:justify-between lg:justify-start md:w-[549px] lg:w-1/3'>
+                                <h2 className='font-bold uppercase text-[24px] md:text-[32px] leading-[36px] mb-6'>In the box</h2>
+                                <ol className='list-none'>
+                                {
+                                    includes ? includes.map((include: Item, index: number) => (
+                                        <li key={index} className='flex flex-row items-start mb-2 last:mb-0'>
+                                            <span className='font-bold text-dim-orange text-[15px] leading-[25px] w-1'>{ include.quantity }x</span>
+                                            <span className='ml-10 font-medium text-[15px] leading-[25px] opacity-50'>{ include.item }</span>
+                                        </li>
+                                    )) : null
+                                }
+                                </ol>
+                            </div>
                         </section>
                         <section className='mt-[88px]'>
                             <ol className='list-none md:grid grid-rows-2 grid-flow-col items-end gap-5'>

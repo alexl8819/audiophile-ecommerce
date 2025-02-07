@@ -48,10 +48,10 @@ selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as 
 		{ name: 'Earphones', url: '/earphones' }
 	]} styles={{ backgroundColor: 'bg-black' }} client:load />
 	<main class="pt-24 md:pt-28 pb-2 mb-8">
-		<div class="mx-8">
+		<div class="mx-8 lg:mx-40">
 			<NavigationButton method={NavigationMethod.Back} client:load>Back</NavigationButton>
 		</div>
-		<section class="my-12 mx-8">
+		<section class="my-12 mx-8 lg:mx-40">
             <ProductCard
                 isPreview={false}
                 name={selectedProduct.name}
@@ -67,13 +67,13 @@ selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as 
                 client:load         
             />
 		</section>
-		<section class="my-12 mx-8">
+		<section class="my-16 mx-8 lg:mx-40">
 			<RecommendedProductCard 
 				recommendations={selectedProduct.recommendations as Array<RecommendedProduct>}
 				client:visible
 			/>
 		</section>
-		<section class="my-24 mx-8">
+		<section class="my-24 mx-8 lg:mx-40">
 			<NavigationMenu 
 				categories={['headphones', 'speakers', 'earphones']} 
 				client:visible 
