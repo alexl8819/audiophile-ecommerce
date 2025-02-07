@@ -67,11 +67,12 @@ interface ProductCardProps {
     galleryImages?: number
     availableQuantity?: number
     includes?: Array<Item>
+    flipRow?: boolean
 }
 
 export const ProductCard: FC<ProductCardProps> = ({ 
     name, description, category, isPreview, features, productId, 
-    isNew, price, galleryImages, availableQuantity, includes
+    isNew, price, galleryImages, availableQuantity, includes, flipRow = false
 }) => {
     const [quantitySelected, setQuantitySelected] = useState<number>(1);
 
@@ -93,18 +94,18 @@ export const ProductCard: FC<ProductCardProps> = ({
     }, []);
 
     return (
-        <div className={!isPreview ? 'text-left' : 'text-center'}>
-            <section className={!isPreview ? 'flex flex-col md:flex-row mb-11' : ''}>
-                <div className='md:w-full md:h-full'>
+        <div className={!isPreview ? 'text-left' : 'text-center lg:text-left'}>
+            <section className={!isPreview ? `flex flex-col md:flex-row mb-11` : `flex flex-col ${flipRow ? 'lg:flex-row-reverse' : 'lg:flex-row'} lg:items-center mb-11`}>
+                <div className='md:w-full lg:w-1/2 md:h-full'>
                     <ProductShowcase name={name} path={`product-${productId}`} target={`image-${isPreview ? 'category-page-preview' : 'product'}`} />
                 </div>
-                <div className='md:ml-2 flex flex-col md:px-16'>
+                <div className='md:ml-2 flex flex-col md:px-16 lg:px-28 lg:w-1/2'>
                     {
                         isNew || isPreview ? (
                             <p className='uppercase text-dim-orange text-[14px] tracking-[10px] my-3'>New product</p>
                         ) : null
                     }
-			        <h2 className='font-bold uppercase text-[28px] tracking-[1px] my-3'>{ name }</h2>
+			        <h2 className='font-bold uppercase text-[28px] lg:text-[40px] lg:leading-[44px] tracking-[1px] lg:tracking-[1.43px] my-3'>{ name }</h2>
                     <p className='font-medium text-[15px] leading-[25px] opacity-50 mt-3 mb-8'>{ description }</p>
                     {
                         !isPreview && price ? (
@@ -146,8 +147,8 @@ export const ProductCard: FC<ProductCardProps> = ({
                     }
 			        {
                         isPreview ? (
-                            <div className='flex flex-col items-center w-full'>
-                                <Link href={`/${category}/${productId}`} className="bg-dim-orange text-white py-3 px-8 font-bold uppercase text-[13px] w-40">See product</Link>
+                            <div className='flex flex-col items-center lg:items-start w-full'>
+                                <Link href={`/${category}/${productId}`} className="bg-dim-orange hover:opacity-80 text-white py-3 px-8 font-bold uppercase text-[13px] w-40">See product</Link>
                             </div>
                         ) : null
                     }
