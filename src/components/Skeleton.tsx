@@ -1,5 +1,9 @@
 import { memo } from 'react';
 
+export const IconButtonSkeleton = memo(() => {
+    return (<div className='bg-dark-gray w-6 h-6 rounded-full animate-pulse'></div>)
+});
+
 export const CategoryDisplaySkeleton = memo(() => {
     return (
         <>

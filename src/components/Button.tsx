@@ -1,5 +1,6 @@
 import { type FC, memo, useState, useEffect, type PropsWithChildren } from "react";
 import { Button, Input, NumberField, Label, Group, type PressEvent } from "react-aria-components";
+import { IconButtonSkeleton } from "./Skeleton";
 
 type PressFunction = (e: PressEvent) => void;
 
@@ -37,7 +38,7 @@ export const StyledIconButton: FC<ButtonIconProps> = memo(({ iconName, altText, 
             onPress={onPress}
         >
             { 
-                icon ? <img src={icon} alt={altText} loading="eager" /> : null
+                icon ? <img src={icon} alt={altText} loading="eager" /> : <IconButtonSkeleton />
             }
             {
                 text ? <span>{ text }</span> : null
