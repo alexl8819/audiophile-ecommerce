@@ -10,7 +10,8 @@ export default {
 				'dim-orange': '#D87D4A',
 				'light-gray': '#F1F1F1',
 				'lighter-gray': '#CFCFCF',
-				'dark-gray': '#979797'
+				'dark-gray': '#979797',
+				'darker-gray': '#4C4C4C'
 			},
 			'backgroundImage': {
 				'home-mobile-header': 'url(/mobile/image-header.jpg)',
