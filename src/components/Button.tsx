@@ -72,7 +72,7 @@ export const QuantitySelectionButtonGroup: FC<QuantitySelectionButtonGroupProps>
                 <Input
                     type='number' 
                     value={value} 
-                    className='w-12 text-[13px] tracking-[1px] bg-light-gray text-center cursor-pointer'
+                    className='w-12 font-bold text-[13px] tracking-[1px] bg-light-gray text-center cursor-pointer'
                     readOnly={true}
                 />
                 <Button 

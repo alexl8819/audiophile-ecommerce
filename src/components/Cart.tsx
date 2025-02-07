@@ -66,7 +66,7 @@ export const Cart: FC<CartProps> = ({ items }) => {
 
     return (
         <div className='fixed inset-0 bg-dark-gray bg-opacity-40 z-50'>
-            <div className="flex justify-center md:justify-end items-center md:items-start md:pt-20 md:pr-6 min-h-screen mx-4">
+            <div className="flex justify-center md:justify-end items-center md:items-start md:pt-20 md:pr-6 lg:pr-36 min-h-screen mx-4">
                 <div className="bg-white border border-gray p-8 rounded-lg shadow-2xl max-w-sm w-full">
                     <div className='flex flex-row justify-end items-center'>
                         <Button type='button' onPress={() => toggleCart()}>
@@ -77,7 +77,7 @@ export const Cart: FC<CartProps> = ({ items }) => {
                         <h3 className='font-bold uppercase'>Cart (<span>{ size }</span>)</h3>
                         {
                             size > 0 ? (
-                                <Button type='button' className='underline' onPress={() => empty()}>Remove all</Button>
+                                <Button type='button' className='underline hover:no-underline hover:text-dim-orange' onPress={() => empty()}>Remove all</Button>
                             ) : null
                         }
                     </div>
@@ -104,7 +104,7 @@ export const Cart: FC<CartProps> = ({ items }) => {
                     <div className="flex justify-center items-center text-center">
                         <Link 
                             href='/checkout' 
-                            className="px-8 py-3 disabled:bg-dark-gray bg-dim-orange font-bold uppercase text-white text-[13px] tracking-[1px] w-full disabled:cursor-not-allowed"
+                            className="px-8 py-3 disabled:bg-dark-gray bg-dim-orange hover:opacity-80 font-bold uppercase text-white text-[13px] tracking-[1px] w-full disabled:cursor-not-allowed"
                             isDisabled={size === 0}
                         >
                             Checkout
