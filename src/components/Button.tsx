@@ -113,7 +113,7 @@ export const NavigationButton: FC<NavigationButtonProps> = ({ method, children }
     }, []);
 
     return (
-        <Button onPress={handleNav} className='opacity-50'>
+        <Button onPress={handleNav} className='hover:text-dim-orange opacity-50'>
             { children }
         </Button>
     );
