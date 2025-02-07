@@ -99,7 +99,7 @@ export const ProductCard: FC<ProductCardProps> = ({
                 <div className='md:w-full lg:w-1/2 md:h-full'>
                     <ProductShowcase name={name} path={`product-${productId}`} target={`image-${isPreview ? 'category-page-preview' : 'product'}`} />
                 </div>
-                <div className='md:ml-2 flex flex-col md:px-16 lg:w-1/2'>
+                <div className='md:ml-2 flex flex-col md:justify-center md:px-16 lg:w-1/2'>
                     {
                         isNew || isPreview ? (
                             <p className='uppercase text-dim-orange text-[14px] tracking-[10px] my-3'>New product</p>
