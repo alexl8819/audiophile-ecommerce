@@ -177,10 +177,10 @@ export const ProductCard: FC<ProductCardProps> = ({
                             </div>
                         </section>
                         <section className='mt-[88px]'>
-                            <ol className='list-none md:grid grid-rows-2 grid-flow-col items-end gap-5'>
+                            <ol className='list-none md:grid grid-rows-2 grid-flow-col items-end gap-x-4 gap-y-2'>
                                 {
                                     Array.from({length: galleryImages || 3 }).map((_, index: number) => (
-                                        <li className={index === 2 ? 'row-span-2 col-span-3' : `${index === 1 ? 'row-start-2' : 'row-span-1'} col-span-2`} key={index}>
+                                        <li className={index === 2 ? 'row-span-2 col-span-3 h-full mb-6 md:mb-0' : `${index === 1 ? 'row-start-2' : 'row-span-1'} col-span-2 h-full mb-6 md:mb-0`} key={index}>
                                             <ProductShowcase
                                                 name={name} 
                                                 path={`product-${productId}`} 
