@@ -10,6 +10,7 @@ import {
     useStripe,
     useElements,
   } from '@stripe/react-stripe-js';
+import { usePlacesWidget } from 'react-google-autocomplete';
 import Select, { type SingleValue } from 'react-select';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { countries, type TCountryCode } from 'countries-list';
@@ -38,7 +39,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
     const stripe = useStripe();
     const elements = useElements();
     
-    const { control, handleSubmit } = useForm({
+    const { control, handleSubmit, setValue, formState } = useForm({
         defaultValues: {
             name: '',
             email: '',
@@ -54,7 +55,30 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
         }
     });
 
-    const onSubmit: SubmitHandler<Order> = () => {
+    const { ref: aRef } = usePlacesWidget({
+        apiKey: import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY,
+        onPlaceSelected: (place) => {
+            console.log(place);
+            const streetNum = place.address_components.find((component: any) => component.types.includes('street_number'))['long_name'];
+            const streetAddress = place.address_components.find((component: any) => component.types.includes('route'))['long_name'];
+            const city = place.address_components.find((component: any) => component.types.includes('locality') || component.types.includes('postal_town'))['long_name'];
+            const postalCode = place.address_components.find((component: any) => component.types.includes('postal_code'))['long_name'];
+            const country = place.address_components.find((component: any) => component.types.includes('country'))['short_name'];
+
+            setValue('shippingAddress', `${streetNum} ${streetAddress}`);
+            setValue('city', city)
+            setValue('zipcode', postalCode);
+            setValue('country', selectionItems.find((item) => item.value.toLowerCase() === country.toLowerCase()) || selectionItems[0]);
+
+            onCountrySet(country.toLowerCase());
+        },
+        options: {
+            types: ["address"],
+            // componentRestrictions: { country: selectionItems.map((item) => item.value.toLowerCase()) }, // Only 5 allowed per docs
+        }
+    });
+
+    const onSubmit: SubmitHandler<Order> = (d) => {
         // TODO: call /order endpoint
     }
 
@@ -86,12 +110,15 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                                     isInvalid={invalid}
                                     className='flex flex-col mb-3 md:mb-0 w-full'
                                 >
-                                    <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Name</Label>
+                                    <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>
+                                        Name
+                                    </Label>
                                     <Input 
-                                        ref={ref} 
+                                        ref={ref}
                                         className='border border-lighter-gray py-3 px-6 rounded-lg' 
                                         placeholder='John Smith'
                                     />
+                                    {invalid && error && <p>{error.message}</p>}
                                 </TextField>
                             )}
                         />
@@ -114,12 +141,13 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                                     className='flex flex-col my-3 md:my-0 w-full'
                                 >
                                     <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Email</Label>
-                                    <Input 
+                                    <Input
+                                        ref={ref}
                                         type='email' 
-                                        ref={ref} 
                                         className='border border-lighter-gray py-3 px-6 rounded-lg' 
                                         placeholder='johnsmith@gmail.com'
                                     />
+                                    {invalid && error && <p>{error.message}</p>}
                                 </TextField>
                             )}
                         />
@@ -143,12 +171,13 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                                 className='flex flex-col mt-3 md:mt-0 md:w-1/2 md:pr-2'
                             >
                                 <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Phone</Label>
-                                <Input 
-                                    type='tel' 
-                                    ref={ref} 
+                                <Input
+                                    ref={ref}
+                                    type='tel'
                                     className='border border-lighter-gray py-3 px-6 rounded-lg' 
                                     placeholder='555-555-5555'
                                 />
+                                {invalid && error && <p>{error.message}</p>}
                             </TextField>
                         )}
                     />
@@ -162,24 +191,30 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                         field: { name, value, onChange, onBlur, ref },
                         fieldState: { invalid, error }
                     }) => (
-                        <TextField 
-                            name={name}
-                            value={value}
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            isRequired
-                            validationBehavior="aria"
-                            isInvalid={invalid}
-                            className='flex flex-col mb-3'
-                        >
-                            <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Address</Label>
-                            <Input 
-                                type='text' 
-                                ref={ref} 
-                                className='border border-lighter-gray py-3 px-6 rounded-lg' 
-                                placeholder='1137 Williams Avenue'
-                            />
-                        </TextField>
+                        <>
+                            <TextField 
+                                name={name}
+                                value={value}
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                isRequired
+                                validationBehavior="aria"
+                                isInvalid={invalid}
+                                className='flex flex-col mb-3'
+                            >
+                                <Label htmlFor={name} className='font-bold text-[12px] tracking-[-0.21px] mb-2'>Address</Label>
+                                <Input 
+                                    type='text' 
+                                    ref={(e: any) => {
+                                        ref(e);
+                                        aRef.current = e;
+                                    }} 
+                                    className='border border-lighter-gray py-3 px-6 rounded-lg' 
+                                    placeholder='1137 Williams Avenue'
+                                />
+                                {invalid && error && <p>{error.message}</p>}
+                            </TextField>
+                        </>
                     )}
                 />
                 <div className='flex flex-col'>
@@ -209,6 +244,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                                         className='border border-lighter-gray py-3 px-6 rounded-lg'
                                         placeholder='10001' 
                                     />
+                                    {invalid && error && <p>{error.message}</p>}
                                 </TextField>
                             )}
                         />
@@ -237,6 +273,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                                         className='border border-lighter-gray py-3 px-6 rounded-lg'
                                         placeholder='New York' 
                                     />
+                                    {invalid && error && <p>{error.message}</p>}
                                 </TextField>
                             )}
                         />
@@ -254,16 +291,16 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                                 styles={{
                                     control: (styles) => ({ ...styles, ...dot() }),
                                 }}
-                                defaultValue={selectionItems[1]}
+                                // defaultValue={{ label: 'United States', value: 'us' }}
                                 isClearable={false}
                                 isSearchable={true}
                                 options={selectionItems}
                                 onChange={(newVal: SingleValue<CountrySelection>) => {
-                                    field.onChange(newVal);
                                     if (newVal) {
                                         // Update VAT rate dynamically for cart preview
                                         onCountrySet(newVal.value);
                                     }
+                                    field.onChange(newVal);
                                 }}
                             />
                         </>
@@ -275,7 +312,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
             </div>
             <div className='lg:w-1/3 lg:ml-4 bg-white lg:px-8 lg:py-4 lg:rounded-lg'>
                 { children }
-                <Input type='submit' className='mt-8 py-4 px-2 bg-dim-orange text-white font-bold uppercase w-full' value='Continue & Pay' onClick={() => onFinish(true)} />
+                <Input type='submit' className='mt-8 py-4 px-2 bg-dim-orange text-white font-bold uppercase w-full' value='Continue & Pay' />
             </div>
         </Form>
     );
