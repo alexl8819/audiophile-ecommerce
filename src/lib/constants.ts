@@ -51,4 +51,9 @@ export interface Order {
     paymentMethod: string
 }
 
+export interface ValidationResponse {
+    error?: string
+    success?: boolean
+}
+
 export const FLAT_SHIPPING_RATE = 0.08;

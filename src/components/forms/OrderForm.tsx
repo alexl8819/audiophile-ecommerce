@@ -14,7 +14,7 @@ import { usePlacesWidget } from 'react-google-autocomplete';
 import Select, { type SingleValue } from 'react-select';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { countries, type TCountryCode } from 'countries-list';
-import type { Order } from '../../lib/constants';
+import type { Order, ValidationResponse } from '../../lib/constants';
 
 const allowedContinents = ['NA', 'EU'];
 
@@ -39,7 +39,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
     const stripe = useStripe();
     const elements = useElements();
     
-    const { control, handleSubmit, setValue, formState } = useForm({
+    const { control, handleSubmit, setValue } = useForm({
         defaultValues: {
             name: '',
             email: '',
@@ -78,7 +78,68 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
         }
     });
 
-    const onSubmit: SubmitHandler<Order> = (d) => {
+    const isPhoneValid = async (phone: string) => {
+        if (phone.length < 11) {
+            return 'Phone must be at least 10 digits';
+        }
+        
+        let phoneValidation;
+
+        try {
+            phoneValidation = await fetch(`/api/validation`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    resource: 'phone',
+                    value: phone
+                })
+            });
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        const validation: ValidationResponse = await phoneValidation.json();
+
+        if (validation.error) {
+            return validation.error;
+        }
+
+        return true;
+    }
+
+    const isEmailValid = async (email: string) => {
+        if (!email.length || email.length <= 5) {
+            return 'Email must be at least five characters';
+        }
+
+        let emailValidation;
+
+        try {
+            emailValidation = await fetch(`/api/validation`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    resource: 'email',
+                    value: email,
+                    options: {
+                        strict: true
+                    }
+                })
+            });
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        const validation: ValidationResponse = await emailValidation.json();
+
+        if (!validation.error) {
+            return validation.error;
+        }
+
+        return true;
+    }
+
+    const onSubmit: SubmitHandler<Order> = () => {
         // TODO: call /order endpoint
     }
 
@@ -95,7 +156,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                         <Controller 
                             control={control}
                             name='name'
-                            rules={{ required: 'Name is required.' }}
+                            rules={{ required: 'Name is required.', pattern: /^[A-Z][a-z]+ [A-Z][a-z]+$/, minLength: 5 }}
                             render={({
                                 field: { name, value, onChange, onBlur, ref },
                                 fieldState: { invalid, error }
@@ -125,7 +186,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                         <Controller 
                             control={control}
                             name='email'
-                            rules={{ required: 'Email is required.' }}
+                            rules={{ required: 'Email is required.', validate: isEmailValid }}
                             render={({
                                 field: { name, value, onChange, onBlur, ref },
                                 fieldState: { invalid, error }
@@ -155,7 +216,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
                     <Controller 
                         control={control}
                         name='phone'
-                        rules={{ required: 'Phone is required.' }}
+                        rules={{ required: 'Phone is required.', validate: isPhoneValid }}
                         render={({
                             field: { name, value, onChange, onBlur, ref },
                             fieldState: { invalid, error }
