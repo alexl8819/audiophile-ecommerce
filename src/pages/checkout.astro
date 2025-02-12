@@ -5,7 +5,13 @@ import Footer from '../components/Footer.astro';
 import { CheckoutPreview } from '../components/Checkout';
 import { NavigationButton, NavigationMethod } from '../components/Button';
 import { FLAT_SHIPPING_RATE } from '../lib/constants';
+import { cartItems } from '../stores/cart';
+
 // TODO: implement server-side validation
+if (!Object.keys(cartItems.get()).length) {
+	return Astro.redirect('/');
+}
+
 const amountDue = 2000;
 ---
 <Layout subtitle="Checkout">
