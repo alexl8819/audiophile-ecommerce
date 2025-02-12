@@ -10,34 +10,42 @@ import { ProductCard, RecommendedProductCard } from '../../components/Card';
 import { NavigationMenu } from '../../components/Menu';
 import { type Product, type Item, type RecommendedProduct } from '../../lib/constants';
 import { NavigationButton, NavigationMethod } from '../../components/Button';
+import { cache } from '../../lib/cache';
 
 const { category, productId } = Astro.params;
 
 let products;
+let selectedProduct;
 
-// TODO: cache
-// TODO: use proper drizzle-orm query
-const statement = sql`
-	SELECT p1.*, '[' || GROUP_CONCAT(json_object('name', p2.name, 'slug', p2.slug, 'category', p2.category)) || ']' AS recommendations, (SELECT COUNT(*) FROM inventory where inventory.product = p1.id) AS quantity FROM Recommendations r JOIN Products p1 ON r.product = p1.id JOIN Products p2 ON r.similar = p2.id WHERE p1.slug = ${productId} AND p1.category = ${category} GROUP BY p1.id;
-`.mapWith(String);
+const cachedProduct = await cache.hasEntry(`${category}_${productId}`) as Product;
 
-try {
-    products = await db.all(statement);
-} catch (err) {
-    if (isDbError(err)) {
-        console.info('LibSQL related error');
-    }
-    console.error(err);
-    return new Response('An unexpected error occurred', { status: 500 });
+if (cachedProduct) {
+	selectedProduct = cachedProduct;
+} else {
+	// TODO: use proper drizzle-orm query
+	const statement = sql`
+		SELECT p1.*, '[' || GROUP_CONCAT(json_object('name', p2.name, 'slug', p2.slug, 'category', p2.category)) || ']' AS recommendations, (SELECT COUNT(*) FROM inventory where inventory.product = p1.id) AS quantity FROM Recommendations r JOIN Products p1 ON r.product = p1.id JOIN Products p2 ON r.similar = p2.id WHERE p1.slug = ${productId} AND p1.category = ${category} GROUP BY p1.id;
+	`.mapWith(String);
+
+	try {
+    	products = await db.all(statement);
+	} catch (err) {
+    	if (isDbError(err)) {
+        	console.info('LibSQL related error');
+    	}
+    	console.error(err);
+    	return new Response('An unexpected error occurred', { status: 500 });
+	}
+
+	if (!products || !products.length) {
+    	return Astro.redirect('/404');
+	}
+
+	selectedProduct = (products[0] as Product);
+	selectedProduct.included = JSON.parse(selectedProduct.included as string);
+	selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as string);
+	await cache.saveEntry(`${category}_${productId}`, JSON.stringify(selectedProduct));
 }
-
-if (!products || !products.length) {
-    return Astro.redirect('/404');
-}
-
-const selectedProduct = (products[0] as Product);
-selectedProduct.included = JSON.parse(selectedProduct.included as string);
-selectedProduct.recommendations = JSON.parse(selectedProduct.recommendations as string);
 ---
 
 <Layout subtitle={selectedProduct.name}>
