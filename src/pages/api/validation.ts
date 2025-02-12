@@ -1,34 +1,54 @@
 import type { APIRoute } from "astro";
 import { validateEmail, validatePhone } from "../../lib/common";
+import { cache } from '../../lib/cache';
 import { ServiceUnavailableError } from "../../lib/error";
-
-// TODO: implement cache to reduce validation load upstream
+import type { CachedResponse } from "../../lib/constants";
 
 export const POST: APIRoute = async ({ request }) => {
     const form = await request.json();
 
-    if (form.resource === 'email' && form.value.length) {
-        try {
-            await validateEmail(form.value, import.meta.env.EMAIL_VALIDATION_API_KEY, import.meta.env.EMAIL_VALIDATION_BASE_API, (form.options.strict || false));
-        } catch (err) {
-            return new Response(JSON.stringify({
-                error: (err as Error).message,
-            }), { status: err instanceof ServiceUnavailableError ? 503 : 400 });
+    const cachedResult = await cache.hasEntry(form.value) as CachedResponse;
+    
+    if (cachedResult) {
+        if (!cachedResult.error) {
+            return new Response(JSON.stringify({ success: true }), { status: 200 });
         }
-    } else if (form.resource === 'phone' && form.value.length) {
-        try {
-            await validatePhone(form.value, import.meta.env.PHONE_VALIDATION_API_KEY, import.meta.env.PHONE_VALIDATION_BASE_API);
-        } catch (err) {
-            return new Response(JSON.stringify({
-                error: (err as Error).message
-            }), { status: err instanceof ServiceUnavailableError ? 503 : 400 });
-        }
-    } else {
         return new Response(JSON.stringify({
-            error: 'Must provide a resource to validate'
-        }), { status: 401 })
+            error: cachedResult.error
+        }), { status: 400 });
+    } 
+    
+    if (!form.resource || !form.value) {
+        return new Response(JSON.stringify({
+            error: 'Must provide a resource and value to validate'
+        }), { status: 401 });
     }
 
+    let caughtErr;
+
+    try {
+        if (form.resource === 'email' && form.value.length) {
+            await validateEmail(form.value, import.meta.env.EMAIL_VALIDATION_API_KEY, import.meta.env.EMAIL_VALIDATION_API_BASE, (form.options.strict || false));
+        } else if (form.resource === 'phone' && form.value.length) {
+            await validatePhone(form.value, import.meta.env.PHONE_VALIDATION_API_KEY, import.meta.env.PHONE_VALIDATION_API_BASE);
+        }
+    } catch (err) {
+        console.error(err);
+        caughtErr = err;
+    } finally {
+        if (!caughtErr || !(caughtErr instanceof ServiceUnavailableError)) {
+            await cache.saveEntry(form.value, JSON.stringify({
+                error: caughtErr ? (caughtErr as Error).message : false
+            }));
+        }
+    }
+
+    if (caughtErr) {
+        return new Response(JSON.stringify({
+            error: (caughtErr as Error).message,
+        }), { status: caughtErr instanceof ServiceUnavailableError ? 503 : 400 });
+    }
+    
     return new Response(JSON.stringify({
         success: true
     }), { status: 200 });

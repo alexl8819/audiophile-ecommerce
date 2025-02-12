@@ -1,3 +1,5 @@
+import { name } from '../../package.json';
+
 export interface NavLink {
     name: string
     url: string
@@ -56,4 +58,9 @@ export interface ValidationResponse {
     success?: boolean
 }
 
+export interface CachedResponse {
+    error: string | boolean
+}
+
 export const FLAT_SHIPPING_RATE = 0.08;
+export const NAMESPACE = name;
