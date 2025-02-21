@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --remote",
     "build": "astro build --remote",
     "preview": "astro preview",
     "astro": "astro",
@@ -16,6 +16,7 @@
     "@astrojs/tailwind": "^5.1.4",
     "@astrojs/vercel": "^8.0.1",
     "@nanostores/persistent": "^0.10.2",
+    "@nanostores/query": "^0.3.4",
     "@nanostores/react": "^0.8.4",
     "@stripe/react-stripe-js": "^3.1.1",
     "@stripe/stripe-js": "^5.5.0",
@@ -36,6 +37,7 @@
     "react-hook-form": "^7.54.2",
     "react-select": "^5.10.0",
     "react-toastify": "^11.0.3",
+    "stripe": "^17.6.0",
     "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
