@@ -1,9 +1,9 @@
-import { type FC, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import { Link } from 'react-aria-components';
 import { StyledIconButton } from "./Button";
 import { Navbar } from "./Navbar";
 
-import { toggleCart, cartItems } from "../stores/cart";
+import { toggleCart, cartRef, getCartItems } from "../stores/cart";
 
 import logo from '../assets/shared/desktop/logo.svg';
 
@@ -22,9 +22,29 @@ interface HeaderProps {
 
 export const Header: FC<HeaderProps> = ({ navLinks, styles }) => {
     const [open, setOpen] = useState<boolean>(false);
-    const items = useStore(cartItems);
+    const [items, setItems] = useState();
+
+    const ref = useStore(cartRef);
+    const { mutate } = useStore(getCartItems);
     
     const toggleNav = () => setOpen(open ? false : true);
+
+    useEffect(() => {
+        const findCart = async () => {
+            const res = await mutate({ key: ref.id }) as Response;
+            
+            if (res.ok) {
+                const { items } = await res.json();
+                setItems(items);
+            }
+        }
+
+        if (!ref.id) {
+            return;
+        }
+
+        findCart();
+    }, [ref]);
 
     return (
         <header className={`flex flex-col ${ styles && styles.backgroundColor ? styles.backgroundColor : 'bg-transparent' } absolute top-0 w-full`}>
@@ -40,7 +60,7 @@ export const Header: FC<HeaderProps> = ({ navLinks, styles }) => {
                 </div>
                 <div className="w-auto">
                     <StyledIconButton iconName="icon-cart" altText="shopping cart" onPress={() => toggleCart()} />
-                    <Cart items={items} />
+                    <Cart items={items || {}} />
                 </div>
             </div>
             <div className='h-2 md:mx-12 lg:mx-40 border-b border-b-light-gray opacity-20'></div>

@@ -1,21 +1,25 @@
 import { type FC, useState, useEffect } from 'react';
 import { Button, Link } from 'react-aria-components';
 import { ToastContainer, toast } from 'react-toastify';
-import iconArrowRight from '../assets/shared/desktop/icon-arrow-right.svg';
-import { type Item, type RecommendedProduct } from '../lib/constants';
+import { useStore } from '@nanostores/react';
+import { type Item, type Cart, type RecommendedProduct } from '../lib/constants';
 import { formatCurrency } from '../lib/common';
 import { type ShowcaseStyling, ProductShowcase } from './Gallery';
 import { QuantitySelectionButtonGroup } from './Button';
 
-import { addCartItem } from '../stores/cart';
-import { addProductToInventory } from '../stores/inventory';
+import { addToCart, saveCart, cartRef } from '../stores/cart';
 import { CategoryDisplaySkeleton } from './Skeleton';
 
+import iconArrowRight from '../assets/shared/desktop/icon-arrow-right.svg';
 import 'react-toastify/ReactToastify.css';
 
 interface CategoryProductCardProps {
     category: string
     url: string
+}
+
+interface CartAddResult {
+    key: string
 }
 
 export const CategoryProductCard: FC<CategoryProductCardProps> = ({ category, url }) => {
@@ -72,14 +76,16 @@ interface ProductCardProps {
 
 export const ProductCard: FC<ProductCardProps> = ({ 
     name, description, category, isPreview, features, productId, 
-    isNew, price, galleryImages, availableQuantity, includes, flipRow = false
+    isNew, price, galleryImages, includes, availableQuantity = 1, flipRow = false
 }) => {
     const [quantitySelected, setQuantitySelected] = useState<number>(1);
+    const [quantityAvailable, setQuantityAvailable] = useState<number>(availableQuantity);
+
+    const { id, items } = useStore(cartRef);
+    const { mutate } = useStore(addToCart);
 
     const changeQuantity = (quantity: number) => {
-        const available = availableQuantity || 1;
-
-        if (quantity < 1 || quantity > available) {
+        if (quantity < 1 || quantity > quantityAvailable) {
             return;
         }
         
@@ -87,11 +93,11 @@ export const ProductCard: FC<ProductCardProps> = ({
     };
 
     useEffect(() => {
-        // Add product to local inventory
-        if (!isPreview && availableQuantity) {
-            addProductToInventory(productId, availableQuantity);
+        if (!items[productId]) {
+            setQuantityAvailable(availableQuantity);
+            setQuantitySelected(1);
         }
-    }, []);
+    }, [items]);
 
     return (
         <div className={!isPreview ? 'text-left' : 'text-center lg:text-left'}>
@@ -117,28 +123,37 @@ export const ProductCard: FC<ProductCardProps> = ({
                                         value={quantitySelected}
                                         decrement={() => changeQuantity(quantitySelected - 1)}
                                         increment={() => changeQuantity(quantitySelected + 1)}
-                                        isDisabled={availableQuantity === 0} 
+                                        isDisabled={quantityAvailable === 0} 
                                     />
                                     <Button 
                                         type='button' 
                                         className='bg-dim-orange hover:opacity-80 text-white py-3 px-8 font-bold uppercase text-[13px] tracking-[1px] ml-6 md:ml-8'
-                                        isDisabled={availableQuantity === 0}
-                                        onPress={() => {
-                                            const success = addCartItem({
-                                                name,
-                                                price,
+                                        isDisabled={quantityAvailable === 0}
+                                        onPress={async () => {
+                                            const item = {
                                                 slug: productId,
                                                 quantity: quantitySelected
-                                            });
-                                            if (success) {
-                                                toast.success(`Added ${quantitySelected}x ${name} to cart`);
-                                            } else {
+                                            };
+                                            const newCart: Cart = {};
+                                            newCart[item.slug] = item;
+                                            const res = await mutate({
+                                                key: id,
+                                                item
+                                            }) as Response;
+
+                                            if (!res.ok) {
                                                 toast.error(`Quantity requested exceeds available supply`);
+                                                return;
                                             }
+                                            
+                                            const car = await res.json() as CartAddResult;
+                                            saveCart(car.key, newCart);
+                                            setQuantityAvailable(quantityAvailable - 1);
+                                            toast.success(`Added ${quantitySelected}x ${name} to cart`);
                                         }}
                                     >
                                         {
-                                            availableQuantity && availableQuantity <= 0? 'Out of Stock' : 'Add to Cart'
+                                            quantityAvailable <= 0 ? 'Out of Stock' : 'Add to Cart'
                                         }
                                     </Button>
                                 </div>

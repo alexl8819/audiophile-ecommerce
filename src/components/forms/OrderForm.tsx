@@ -15,6 +15,7 @@ import Select, { type SingleValue } from 'react-select';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { countries, type TCountryCode } from 'countries-list';
 import type { Order, ValidationResponse } from '../../lib/constants';
+// import { cartRef } from '../../stores/cart';
 
 const allowedContinents = ['NA', 'EU'];
 
@@ -139,8 +140,37 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
         return true;
     }
 
-    const onSubmit: SubmitHandler<Order> = () => {
+    const onSubmit: SubmitHandler<Order> = async () => {
+        if (!stripe || !elements) {
+            return;
+        }
+
+        const { error: submitError } = await elements.submit();
+
+        if (submitError) {
+            console.error(submitError);
+            return;
+        }
+
         // TODO: call /order endpoint
+        /* const res = await fetch('/api/payments', {
+            method: 'POST'
+        });
+
+        const { error, clientSecret } = await res.json();
+
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        const { error: paymentError } = await stripe.confirmPayment({
+            elements,
+            clientSecret,
+            confirmParams: {
+                return_url: `${import.meta.env.DEV ? 'http://localhost:4321' : ''}/order/123/complete`,
+            },
+        });*/
     }
 
     const dot = () => ({

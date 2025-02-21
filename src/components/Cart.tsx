@@ -1,20 +1,25 @@
 import { type FC, useState, useEffect, memo } from 'react';
 import { Button, Link } from 'react-aria-components';
 import { useStore } from '@nanostores/react';
-import type { CartItem } from '../lib/constants';
-import { isOpen, updateCartQuantity, toggleCart, empty, type Cart as ShoppingCart } from '../stores/cart';
-import { getProductQuantity } from '../stores/inventory';
+import { type Cart as ShoppingCart, type CartItemListing } from '../lib/constants'; 
+import { isOpen, updateCartQuantity, toggleCart, saveCart, emptyCart, cartRef } from '../stores/cart';
 import { Xmark, Cart as CartIcon } from './LineIcon';
 import ProductShowcase from './Gallery';
 import { QuantitySelectionButtonGroup } from './Button';
 import { formatCurrency } from '../lib/common';
+import { toast } from 'react-toastify';
 
 interface CartItemProps {
-    item: CartItem
+    item: CartItemListing
 }
 
 const CartItem: FC<CartItemProps> = ({ item }) => {
-    const available = getProductQuantity(item.slug);
+    const { id, items } = useStore(cartRef);
+    const { mutate } = useStore(updateCartQuantity);
+
+    if (!id) {
+        return null;
+    }
     
     return (
         <div className='flex flex-row justify-start items-center my-4'>
@@ -29,12 +34,42 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
                 <QuantitySelectionButtonGroup 
                     label='Item Quantity' 
                     value={item.quantity} 
-                    increment={() => {
-                        if (item.quantity < available) {
-                            updateCartQuantity(item, 1);
+                    increment={async () => {
+                        const res = await mutate({ key: id, item: {
+                            slug: item.slug,
+                            quantity: 1
+                        }}) as Response;
+
+                        if (!res.ok) {
+                            const { error } = await res.json();
+                            toast.error(error);
+                            return;
                         }
+
+                        items[item.slug] = Object.assign({}, items[item.slug], {
+                            quantity: items[item.slug].quantity + 1
+                        });
+
+                        saveCart(id, items);
                     }} 
-                    decrement={() => updateCartQuantity(item, -1)}
+                    decrement={async () => {
+                        const res = await mutate({ key: id, item: {
+                            slug: item.slug,
+                            quantity: -1
+                        }}) as Response;
+
+                        if (!res.ok) {
+                            const { error } = await res.json();
+                            toast.error(error);
+                            return;
+                        }
+
+                        items[item.slug] = Object.assign({}, items[item.slug], {
+                            quantity: items[item.slug].quantity - 1
+                        });
+
+                        saveCart(id, items);
+                    }}
                     isDisabled={false} 
                 />
             </div>
@@ -48,10 +83,32 @@ interface CartProps {
 
 export const Cart: FC<CartProps> = ({ items }) => {
     const [subtotal, setSubtotal] = useState<number>(0);
+
     const opened = useStore(isOpen);
+    const { id } = useStore(cartRef);
+    const { mutate } = useStore(emptyCart);
+
+    const size = Object.keys(items).length;
 
     const calculateSubtotal = () => {
-        setSubtotal(Object.values(items).reduce((acc, cur) => acc + (cur.quantity * cur.price), 0));
+        const newSubtotal = Object.values(items).reduce((acc, cur) => acc + (cur.quantity * (cur as CartItemListing).price), 0);
+        setSubtotal(newSubtotal);
+    }
+
+    const removeCartItems = async () => {
+        if (!id) {
+            return;
+        }
+
+        const res = await mutate({
+            key: id
+        }) as Response;
+
+        if (!res.ok) {
+            toast.error('Failed to empty cart');
+        }
+
+        saveCart(id, {});
     }
 
     useEffect(() => {
@@ -61,8 +118,6 @@ export const Cart: FC<CartProps> = ({ items }) => {
     if (!opened) {
         return null;
     }
-
-    const size = Object.keys(items).length;
 
     return (
         <div className='fixed inset-0 bg-dark-gray bg-opacity-40 z-50'>
@@ -77,7 +132,7 @@ export const Cart: FC<CartProps> = ({ items }) => {
                         <h3 className='font-bold uppercase'>Cart (<span>{ size }</span>)</h3>
                         {
                             size > 0 ? (
-                                <Button type='button' className='underline hover:no-underline hover:text-dim-orange' onPress={() => empty()}>Remove all</Button>
+                                <Button type='button' className='underline hover:no-underline hover:text-dim-orange' onPress={() => removeCartItems()}>Remove all</Button>
                             ) : null
                         }
                     </div>
@@ -85,8 +140,8 @@ export const Cart: FC<CartProps> = ({ items }) => {
                         size > 0 ? (
                             <ul className='list-none'>
                             {
-                                Object.values(items).map((item: CartItem, index: number) => (
-                                    <CartItem key={index} item={item} />
+                                Object.values(items).map((item, index: number) => (
+                                    <CartItem key={index} item={item as CartItemListing} />
                                 ))
                             }
                             </ul>
@@ -117,7 +172,7 @@ export const Cart: FC<CartProps> = ({ items }) => {
 }
 
 interface CartSummaryItemProps {
-    item: CartItem
+    item: CartItemListing
 }
 
 export const CartSummaryItem: FC<CartSummaryItemProps> = ({ item }) => (
@@ -149,7 +204,7 @@ export const CartSummary: FC<CartSummaryProps> = memo(({ items, shippingFee, vat
     const [grandTotal, setGrandTotal] = useState<number>(0);
 
     const calculateAll = () => {
-        const newSubtotal = Object.values(items).reduce((acc, item) => acc += (item.quantity * item.price), 0);
+        const newSubtotal = Object.values(items).reduce((acc, item) => acc += (item.quantity * (item as CartItemListing).price), 0);
         setSubtotal(newSubtotal);
         const newVatCost = vatRate > 0 ? newSubtotal * vatRate : 0;
         setVatCost(newVatCost);
@@ -166,9 +221,9 @@ export const CartSummary: FC<CartSummaryProps> = memo(({ items, shippingFee, vat
             <h2 className='uppercase text-left font-bold text-[18px] tracking-[1.29px]'>Summary</h2>
             <ul className='list-none'>
                 {
-                    Object.values(items).map((item: CartItem, index: number) => (
+                    Object.values(items).map((item, index: number) => (
                         <li key={index}>
-                            <CartSummaryItem item={item} />
+                            <CartSummaryItem item={item as CartItemListing} />
                         </li>
                     ))
                 }
