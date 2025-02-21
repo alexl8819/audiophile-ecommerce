@@ -1,10 +1,11 @@
 import { persistentAtom, setPersistentEngine, type PersistentListener } from '@nanostores/persistent';
 import { atom } from 'nanostores';
-import type { CartItem } from '../lib/constants';
-import { getProductQuantity } from './inventory';
+import type { Cart, CartItemRequest } from '../lib/constants';
+import { createMutatorStore } from './fetcher';
 
-export interface Cart {
-    [slug: string]: CartItem
+export interface CartRef {
+    id: string | null,
+    items: Cart
 }
 
 // Switch from localStorage to sessionStorage
@@ -26,7 +27,7 @@ if (typeof window !== 'undefined') {
 
 export const isOpen = atom<boolean>(false);
 
-export const cartItems = persistentAtom<Cart>('cart', {}, {
+export const cartRef = persistentAtom<CartRef>('cart', { id: null, items: {} }, {
     encode: JSON.stringify,
     decode: JSON.parse,
 });
@@ -35,45 +36,54 @@ export function toggleCart () {
     isOpen.set(isOpen.get() ? false : true);
 }
 
-export function addCartItem (item: CartItem) {
-    const newCart: Cart = {};
-    const itemFound = cartItems.get()[item.slug];
-
-    const updatedQuantity = (itemFound ? itemFound.quantity : 0) + item.quantity;
-
-    if (updatedQuantity > getProductQuantity(item.slug)) {
-        return false;
-    }
-    
-    newCart[item.slug] = Object.assign({}, itemFound || item, {
-        quantity: updatedQuantity
-    });
-
-    cartItems.set(Object.assign({}, cartItems.get(), newCart));
-    return true;
+interface CartAPIRequest {
+    key: string | null,
+    item?: CartItemRequest
 }
 
-export function updateCartQuantity (item: CartItem, quantity: number) {
-    const newCart: Cart = {};
-    const itemFound = cartItems.get()[item.slug];
-
-    if (!itemFound) {
-        throw new Error('Cart item is missing');
-    }
-
-    if (itemFound.quantity <= 1 && quantity === -1) {
-        const { [itemFound.slug]: _, ...partialObj } = cartItems.get();
-        cartItems.set(partialObj);
-        return;
-    }
-    
-    newCart[item.slug] = Object.assign({}, itemFound, {
-        quantity: itemFound.quantity + quantity
-    });
-
-    cartItems.set(Object.assign({}, cartItems.get(), newCart));
+export function saveCart (id: string, items: Cart = {}) {
+    cartRef.set({ id, items });
 }
 
-export function empty () {
-    cartItems.set({});
-}
+
+export const getCartItems = createMutatorStore<CartAPIRequest>(
+    async ({ data: r, revalidate }) => {
+        revalidate(`/api/carts/${r.key}`);
+        return fetch(`/api/cart/${r.key}`);
+    }
+);
+
+export const addToCart = createMutatorStore<CartAPIRequest>(
+    async ({ data: r, revalidate, getCacheUpdater }) => {
+        return fetch('/api/cart', {
+            method: 'POST',
+            body: JSON.stringify({
+                cid: r.key,
+                item: r.item
+            })
+        });
+    }
+);
+
+export const updateCartQuantity = createMutatorStore<CartAPIRequest>(
+    async ({ data: r, revalidate }) => {
+        revalidate(`/api/cart/${r.key}`);
+        return fetch(`/api/cart/${r.key}`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                item: r.item
+            })
+        });
+    }
+);
+
+
+export const emptyCart = createMutatorStore<CartAPIRequest>(
+    async ({ data: r, getCacheUpdater }) => {
+        const [updateCache, _] = getCacheUpdater(`/api/post/${r.key}`);
+        updateCache({});
+        return fetch(`/api/cart/${r.key}`, {
+            method: 'DELETE'
+        });
+    }
+);
