@@ -10,11 +10,20 @@ export interface Item {
     item: string
 }
 
-export interface CartItem {
+export interface Cart {
+    [slug: string]: CartItemRequest | CartItemListing
+}
+
+export interface CartItemListing {
     quantity: number
     name: string
     price: number
     slug: string
+}
+
+export interface CartItemRequest {
+    slug: string,
+    quantity: number
 }
 
 export interface RecommendedProduct {

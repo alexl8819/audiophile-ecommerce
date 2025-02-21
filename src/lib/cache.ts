@@ -1,16 +1,11 @@
 import { createHash } from 'node:crypto';
-import { Redis } from '@upstash/redis';
+import { type RedisConfig, useRedisAdapter } from './adapter/redis';
 import ms from 'ms';
 
 import { NAMESPACE } from './constants';
 
-interface RedisConfig {
-    url: string,
-    token: string
-}
-
 function useLRUCache (redisConfig: RedisConfig, expiration = '72h', maxSize = 10000) {
-    const _redis = new Redis(redisConfig);
+    const _redis = useRedisAdapter(redisConfig);
 
     return Object.freeze({
         hasEntry: async (value: string) => {
