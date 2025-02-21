@@ -1,5 +1,5 @@
-import { loadStripe } from '@stripe/stripe-js/pure';
+import Stripe from 'stripe';
 
-export const stripeClient = await loadStripe(import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY);
+export const stripeServer = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 
-export default stripeClient;
+export default { stripeServer };
