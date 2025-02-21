@@ -7,6 +7,10 @@ export function formatCurrency (price: number, currency: string = 'USD') {
     }).format(price);
 }
 
+export function calculateTotal (subtotal: number, shippingFee: number, vatRate?: number) {
+    return subtotal + (vatRate && vatRate > 0 ? subtotal * vatRate : 0) + shippingFee;
+}
+
 export async function validatePhone (phone: string, apiKey: string, apiBase: string, country?: string) {
     let phoneValidationResponse;
 
