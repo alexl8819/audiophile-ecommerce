@@ -105,9 +105,7 @@ const Orders = defineTable({
     created: column.date({
       default: NOW
     }),
-    item: column.number({
-      references: () => Inventory.columns.id
-    }),
+    items: column.json(),
     customer: column.number({
       references: () => Customers.columns.id
     })
