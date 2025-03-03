@@ -32,8 +32,8 @@ export const Header: FC<HeaderProps> = ({ navLinks, styles }) => {
     useEffect(() => {
         const findCart = async () => {
             const res = await mutate({ key: ref.id }) as Response;
-            
-            if (res.ok) {
+
+            if (res && res.ok) {
                 const { items } = await res.json();
                 setItems(items);
             }
