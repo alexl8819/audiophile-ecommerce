@@ -207,7 +207,7 @@ export const ProductCard: FC<ProductCardProps> = ({
                                 }
                             </ol>
                         </section>
-                        <ToastContainer autoClose={3000} />
+                        <ToastContainer autoClose={3000} position='bottom-right' />
                     </>
                 ) : null
             }
