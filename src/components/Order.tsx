@@ -3,12 +3,12 @@ import { Button } from 'react-aria-components';
 import { useStore } from '@nanostores/react';
 
 import { formatCurrency } from '../lib/common';
-import type { CartItem } from '../lib/constants';
+import type { CartItemListing } from '../lib/constants';
 import { CartSummaryItem } from './Cart';
 import { isComplete, toggleCompletion } from '../stores/order';
 
 interface OrderSummaryProps {
-    sampleItem: CartItem
+    sampleItem: CartItemListing
     itemsInCart: number
     total: number
 }
