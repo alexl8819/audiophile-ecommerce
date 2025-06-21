@@ -59,7 +59,15 @@ export const Header: FC<HeaderProps> = ({ navLinks, styles }) => {
                     </div>
                 </div>
                 <div className="w-auto">
-                    <StyledIconButton iconName="icon-cart" altText="shopping cart" onPress={() => toggleCart()} />
+                    <div className="z-0 flex items-center justify-center lg:min-w-12">
+                        {
+                            items && Object.keys(items).length > 0 && <span className="relative size-3 -mr-7 -mt-8 z-20">  
+                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-600 opacity-75"></span>  
+                                <span className="relative inline-flex size-3 rounded-full bg-red-600"></span>
+                            </span>
+                        }
+                        <StyledIconButton className="z-10" iconName="icon-cart" altText="shopping cart" onPress={() => toggleCart()} />
+                    </div>
                     <Cart items={items || {}} />
                 </div>
             </div>
