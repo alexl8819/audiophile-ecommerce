@@ -10,9 +10,10 @@ interface ButtonIconProps {
     viewportModifier?: string
     altText: string
     onPress: PressFunction
+    className?: string
 }
 
-export const StyledIconButton: FC<ButtonIconProps> = memo(({ iconName, altText, text, onPress, viewportModifier = 'desktop' }) => {
+export const StyledIconButton: FC<ButtonIconProps> = memo(({ iconName, altText, text, onPress, className, viewportModifier = 'desktop' }) => {
     const [icon, setIcon] = useState<string | null>(null);
     
     const loadIcon = async () => {
@@ -34,7 +35,7 @@ export const StyledIconButton: FC<ButtonIconProps> = memo(({ iconName, altText, 
     return (
         <Button 
             type="button" 
-            className={'flex flex-row justify-evenly items-center space-x-2'}
+            className={className || 'flex flex-row justify-evenly items-center space-x-2'}
             onPress={onPress}
         >
             { 
