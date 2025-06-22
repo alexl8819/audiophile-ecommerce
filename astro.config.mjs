@@ -21,6 +21,6 @@ export default defineConfig({
       svg: true,
   },
   security: {
-      checkOrigin: true
+      checkOrigin: false
   }
 });
