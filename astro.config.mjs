@@ -19,5 +19,12 @@ export default defineConfig({
   prefetch: true,
   security: {
       checkOrigin: false
+  },
+  vite: {
+    resolve: {
+      alias: {
+        'astro-aws-amplify': '@alexl8819/astro-aws-amplify'
+      }
+    }
   }
 });
