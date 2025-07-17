@@ -9,7 +9,7 @@ import react from '@astrojs/react';
 
 import db from '@astrojs/db';
 
-import awsAmplify from 'astro-aws-amplify';
+import awsAmplify from '@alexl8819/astro-aws-amplify';
 
 // https://astro.build/config
 export default defineConfig({
