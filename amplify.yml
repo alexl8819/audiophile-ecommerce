@@ -1,0 +1,32 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci --cache .npm --prefer-offline
+    build:
+      commands:
+        - npm run build
+        - mv node_modules ./.amplify-hosting/compute/default
+  artifacts:
+    baseDirectory: .amplify-hosting
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .npm/**/*
+backend:
+  phases:
+    preBuild:
+      commands:
+        - echo "No backend prebuild steps"
+    build:
+      commands:
+        - echo "No backend build steps"
+  resources:
+    - function:
+        name: ssr
+        runtime: nodejs18.x
+        handler: dist/server/entry.mjs
+        environment:
+          NODE_ENV: production
