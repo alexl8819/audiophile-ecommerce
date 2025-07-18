@@ -12,7 +12,6 @@ frontend:
         - "rm -r node_modules/@astrojs/tailwind"
         - "rm -r node_modules/@alexl8819/astro-aws-amplify"
         - "rm -r node_modules/@esbuild"
-        - "rm -r node_modules/@swc"
         - "rm -r node_modules/@typescript-eslint"
         - "rm -r node_modules/@shikijs"
         - "rm -r node_modules/@img"
