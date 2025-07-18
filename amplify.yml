@@ -11,6 +11,8 @@ frontend:
         - "rm -r node_modules/@astrojs/react"
         - "rm -r node_modules/@astrojs/tailwind"
         - "rm -r node_modules/@alexl8819/astro-aws-amplify"
+        - "rm -r node_modules/@esbuild"
+        - "rm -r node_modules/@swc"
         - "mv node_modules ./.amplify-hosting/compute/default"
   artifacts:
     baseDirectory: .amplify-hosting
