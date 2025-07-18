@@ -36,6 +36,6 @@ backend:
     - function:
         name: ssr
         runtime: nodejs18.x
-        handler: dist/server/entry.mjs
+        handler: entry.mjs
         environment:
           NODE_ENV: production
