@@ -33,7 +33,7 @@ backend:
   resources:
     - function:
         name: ssr
-        runtime: nodejs18.x
+        runtime: nodejs20.x
         handler: entry.mjs
         environment:
           NODE_ENV: production
