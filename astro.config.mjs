@@ -9,7 +9,7 @@ import react from '@astrojs/react';
 
 import db from '@astrojs/db';
 
-import awsAmplify from '@alexl8819/astro-aws-amplify';
+import awsAmplify from 'astro-aws-amplify';
 
 // https://astro.build/config
 export default defineConfig({
@@ -19,12 +19,5 @@ export default defineConfig({
   prefetch: true,
   security: {
       checkOrigin: false
-  },
-  vite: {
-    resolve: {
-      alias: {
-        'astro-aws-amplify': '@alexl8819/astro-aws-amplify'
-      }
-    }
   }
 });
