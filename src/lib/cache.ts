@@ -6,6 +6,8 @@ import { NAMESPACE } from './constants';
 
 const DEV = process.env.NODE_ENV !== 'production';
 
+console.log(`is dev env: ${DEV}`);
+
 function useLRUCache (redisConfig: RedisConfig, expiration = '72h', maxSize = 10000) {
     const _redis = useRedisAdapter(redisConfig);
 
@@ -45,7 +47,9 @@ function useLRUCache (redisConfig: RedisConfig, expiration = '72h', maxSize = 10
     });
 }
 
+console.log(process.env);
+
 export const cache = useLRUCache({
-    url: process.env.NODE_ENV === 'production' || (typeof window === undefined) ? process.env.UPSTASH_REDIS_REST_URL : import.meta.env.UPSTASH_REDIS_REST_URL,
-    token: process.env.NODE_ENV === 'production' || (typeof window === undefined) ? process.env.UPSTASH_REDIS_REST_TOKEN : import.meta.env.UPSTASH_REDIS_REST_TOKEN
+    url: (typeof window === undefined) ? process.env.UPSTASH_REDIS_REST_URL : import.meta.env.UPSTASH_REDIS_REST_URL,
+    token: (typeof window === undefined) ? process.env.UPSTASH_REDIS_REST_TOKEN : import.meta.env.UPSTASH_REDIS_REST_TOKEN
 });
