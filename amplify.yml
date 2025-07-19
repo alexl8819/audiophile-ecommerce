@@ -9,11 +9,11 @@ frontend:
         - npm run build
         - "rm -r node_modules/@astrojs/react"
         - "rm -r node_modules/@astrojs/tailwind"
-        - "rm -r node_modules/@alexl8819/astro-aws-amplify"
         - "rm -r node_modules/@esbuild"
         - "rm -r node_modules/@typescript-eslint"
         - "rm -r node_modules/@shikijs"
         - "rm -r node_modules/@img"
+        - "rm -r node_modules/astro-aws-amplify"
         - "mv node_modules ./.amplify-hosting/compute/default"
         - "echo $UPSTASH_REDIS_REST_URL >> .env"
         - "mv .env ./.amplify-hosting/compute/default"
