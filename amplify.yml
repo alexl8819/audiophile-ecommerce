@@ -15,6 +15,8 @@ frontend:
         - "rm -r node_modules/@shikijs"
         - "rm -r node_modules/@img"
         - "mv node_modules ./.amplify-hosting/compute/default"
+        - "echo $UPSTASH_REDIS_REST_URL >> .env"
+        - "mv .env ./.amplify-hosting/compute/default"
   artifacts:
     baseDirectory: .amplify-hosting
     files:
