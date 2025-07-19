@@ -15,9 +15,9 @@ frontend:
         - "rm -r node_modules/@img"
         - "rm -r node_modules/astro-aws-amplify"
         - "mv node_modules ./.amplify-hosting/compute/default"
-        - "echo $UPSTASH_REDIS_REST_URL >> .env"
+        - "echo UPSTASH_REDIS_REST_URL=$UPSTASH_REDIS_REST_URL >> .env"
         - "mv .env ./.amplify-hosting/compute/default"
-        - "du -sh .amplify-hosting/compute/default/node_modules/*"
+        - "cat ./.amplify-hosting/compute/default/.env"
   artifacts:
     baseDirectory: .amplify-hosting
     files:
