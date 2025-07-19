@@ -1,11 +1,10 @@
 import { createHash } from 'node:crypto';
 import { type RedisConfig, useRedisAdapter } from './adapter/redis';
 import ms, { type StringValue } from 'ms';
-import { secret } from '@aws-amplify/backend';
 
 import { NAMESPACE } from './constants';
 
-const DEV = (process.env.NODE_ENV || secret('NODE_ENV')) !== 'production';
+const DEV = (process.env.NODE_ENV) !== 'production';
 
 console.log(`is dev env: ${DEV}`);
 
@@ -48,7 +47,9 @@ function useLRUCache (redisConfig: RedisConfig, expiration = '72h', maxSize = 10
     });
 }
 
+console.log(process.env)
+
 export const cache = useLRUCache({
-    url: !DEV ? (process.env.UPSTASH_REDIS_REST_URL || secret('UPSTASH_REDIS_REST_URL')) : import.meta.env.UPSTASH_REDIS_REST_URL,
-    token: !DEV ? (process.env.UPSTASH_REDIS_REST_TOKEN || secret('UPSTASH_REDIS_REST_TOKEN')) : import.meta.env.UPSTASH_REDIS_REST_TOKEN
+    url: !DEV ? process.env.UPSTASH_REDIS_REST_URL : import.meta.env.UPSTASH_REDIS_REST_URL,
+    token: !DEV ? process.env.UPSTASH_REDIS_REST_TOKEN : import.meta.env.UPSTASH_REDIS_REST_TOKEN
 });
