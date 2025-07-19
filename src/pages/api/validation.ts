@@ -4,6 +4,11 @@ import { cache } from '../../lib/cache';
 import { ServiceUnavailableError } from "../../lib/error";
 import type { CachedResponse } from "../../lib/constants";
 
+const EMAIL_VALIDATION_API_KEY = process.env.EMAIL_VALIDATION_API_KEY || '';
+const EMAIL_VALIDATION_API_BASE = process.env.EMAIL_VALIDATION_API_BASE || '';
+const PHONE_VALIDATION_API_KEY = process.env.PHONE_VALIDATION_API_KEY || '';
+const PHONE_VALIDATION_API_BASE = process.env.PHONE_VALIDATION_API_BASE || '';
+
 export const POST: APIRoute = async ({ request }) => {
     const form = await request.json();
 
@@ -28,9 +33,9 @@ export const POST: APIRoute = async ({ request }) => {
 
     try {
         if (form.resource === 'email' && form.value.length) {
-            await validateEmail(form.value, import.meta.env.EMAIL_VALIDATION_API_KEY, import.meta.env.EMAIL_VALIDATION_API_BASE, (form.options.strict || false));
+            await validateEmail(form.value, EMAIL_VALIDATION_API_KEY, EMAIL_VALIDATION_API_BASE, (form.options.strict || false));
         } else if (form.resource === 'phone' && form.value.length) {
-            await validatePhone(form.value, import.meta.env.PHONE_VALIDATION_API_KEY, import.meta.env.PHONE_VALIDATION_API_BASE);
+            await validatePhone(form.value, PHONE_VALIDATION_API_KEY, PHONE_VALIDATION_API_BASE);
         }
     } catch (err) {
         console.error(err);

@@ -57,7 +57,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
     });
 
     const { ref: aRef } = usePlacesWidget({
-        apiKey: import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY,
+        apiKey: import.meta.env.VITE_PUBLIC_GOOGLE_MAPS_API_KEY,
         onPlaceSelected: (place) => {
             console.log(place);
             const streetNum = place.address_components.find((component: any) => component.types.includes('street_number'))['long_name'];
@@ -153,7 +153,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
         }
 
         // TODO: call /order endpoint
-        /* const res = await fetch('/api/payments', {
+        /*const res = await fetch('/api/payments', {
             method: 'POST'
         });
 
@@ -170,6 +170,12 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
             confirmParams: {
                 return_url: `${import.meta.env.DEV ? 'http://localhost:4321' : ''}/order/123/complete`,
             },
+        });
+
+        const orderRes = await fetch('/api/order', {
+            body: JSON.stringify({
+
+            })
         });*/
     }
 
