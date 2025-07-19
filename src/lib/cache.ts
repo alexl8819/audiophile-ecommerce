@@ -46,6 +46,6 @@ function useLRUCache (redisConfig: RedisConfig, expiration = '72h', maxSize = 10
 }
 
 export const cache = useLRUCache({
-    url: process.env.NODE_ENV === 'production' ? process.env.UPSTASH_REDIS_REST_URL : import.meta.env.UPSTASH_REDIS_REST_URL,
-    token: process.env.NODE_ENV === 'production' ? process.env.UPSTASH_REDIS_REST_TOKEN : import.meta.env.UPSTASH_REDIS_REST_TOKEN
+    url: process.env.NODE_ENV === 'production' || (typeof window === undefined) ? process.env.UPSTASH_REDIS_REST_URL : import.meta.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.NODE_ENV === 'production' || (typeof window === undefined) ? process.env.UPSTASH_REDIS_REST_TOKEN : import.meta.env.UPSTASH_REDIS_REST_TOKEN
 });
