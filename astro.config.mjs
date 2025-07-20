@@ -18,7 +18,7 @@ export default defineConfig({
   output: 'server',
   prefetch: true,
   image: {
-    service: passthroughImageService()
+      service: passthroughImageService()
   },
   security: {
       checkOrigin: false

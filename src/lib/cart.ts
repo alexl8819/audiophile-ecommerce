@@ -116,7 +116,7 @@ async function useEphemeralCart (redisConfig: RedisConfig, expiration = '6h') {
 }
 
 export const cart = await useEphemeralCart({
-    url: process.env.UPSTASH_REDIS_REST_URL || '',
-    token: process.env.UPSTASH_REDIS_REST_TOKEN || ''
+    url: !DEV ? process.env.UPSTASH_REDIS_REST_URL : import.meta.env.UPSTASH_REDIS_REST_URL,
+    token: !DEV ? process.env.UPSTASH_REDIS_REST_TOKEN : import.meta.env.UPSTASH_REDIS_REST_TOKEN
 });
 

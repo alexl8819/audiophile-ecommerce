@@ -4,9 +4,7 @@ import ms, { type StringValue } from 'ms';
 
 import { NAMESPACE } from './constants';
 
-const DEV = (process.env.NODE_ENV) !== 'production';
-
-console.log(`is dev env: ${DEV}`);
+const DEV = process.env.NODE_ENV !== 'production';
 
 function useLRUCache (redisConfig: RedisConfig, expiration = '72h', maxSize = 10000) {
     const _redis = useRedisAdapter(redisConfig);
@@ -46,8 +44,6 @@ function useLRUCache (redisConfig: RedisConfig, expiration = '72h', maxSize = 10
         }
     });
 }
-
-console.log(process.env)
 
 export const cache = useLRUCache({
     url: !DEV ? process.env.UPSTASH_REDIS_REST_URL : import.meta.env.UPSTASH_REDIS_REST_URL,
