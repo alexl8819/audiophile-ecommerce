@@ -36,6 +36,11 @@ interface OrderFormProps extends PropsWithChildren {
     onFinish: (success: boolean) => void
 }
 
+const GOOGLE_API_KEY = import.meta.env.VITE_PUBLIC_GOOGLE_MAPS_API_KEY;
+
+console.log(`gapikey=${GOOGLE_API_KEY}`);
+console.log('Available ENV vars:', import.meta.env);
+
 export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish }) => {
     const stripe = useStripe();
     const elements = useElements();
@@ -57,7 +62,7 @@ export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish
     });
 
     const { ref: aRef } = usePlacesWidget({
-        apiKey: import.meta.env.VITE_PUBLIC_GOOGLE_MAPS_API_KEY,
+        apiKey: GOOGLE_API_KEY,
         onPlaceSelected: (place) => {
             console.log(place);
             const streetNum = place.address_components.find((component: any) => component.types.includes('street_number'))['long_name'];
