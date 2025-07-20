@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, passthroughImageService } from 'astro/config';
 
 // import sitemap from '@astrojs/sitemap';
 
@@ -17,6 +17,9 @@ export default defineConfig({
   adapter: awsAmplify(),
   output: 'server',
   prefetch: true,
+  image: {
+    service: passthroughImageService()
+  },
   security: {
       checkOrigin: false
   }
