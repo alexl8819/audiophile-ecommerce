@@ -36,10 +36,7 @@ interface OrderFormProps extends PropsWithChildren {
     onFinish: (success: boolean) => void
 }
 
-const GOOGLE_API_KEY = import.meta.env.VITE_PUBLIC_GOOGLE_MAPS_API_KEY;
-
-console.log(`gapikey=${GOOGLE_API_KEY}`);
-console.log('Available ENV vars:', import.meta.env);
+const GOOGLE_API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export const OrderForm: FC<OrderFormProps> = ({ children, onCountrySet, onFinish }) => {
     const stripe = useStripe();
