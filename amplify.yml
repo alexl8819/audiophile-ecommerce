@@ -26,7 +26,7 @@ frontend:
         #- "echo EMAIL_VALIDATION_API_KEY=$EMAIL_VALIDATION_API_KEY >> .env"
         #- "echo PHONE_VALIDATION_API_KEY=$PHONE_VALIDATION_API_KEY >> .env"
         - "mv .env ./.amplify-hosting/compute/default"
-        - "du -sh ./.amplify-hosting/compute/default/node_modules"
+        - "du -sh ./.amplify-hosting/compute/default/node_modules/*"
   artifacts:
     baseDirectory: .amplify-hosting
     files:
