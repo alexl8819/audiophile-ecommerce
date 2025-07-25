@@ -13,6 +13,7 @@
     "@astrojs/db": "^0.14.5",
     "@astrojs/react": "^4.3.0",
     "@astrojs/tailwind": "^6.0.2",
+    "@aws-sdk/client-secrets-manager": "^3.848.0",
     "@fontsource-variable/manrope": "^5.2.6",
     "@nanostores/persistent": "^0.10.2",
     "@nanostores/query": "^0.3.4",
@@ -49,7 +50,7 @@
     "globals": "^15.14.0",
     "typescript-eslint": "^8.21.0"
   },
-  "overrides": { 
-    "@libsql/hrana-client": "^0.8.0" 
+  "overrides": {
+    "@libsql/hrana-client": "^0.8.0"
   }
 }
