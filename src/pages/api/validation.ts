@@ -1,13 +1,16 @@
 import type { APIRoute } from "astro";
 import { validateEmail, validatePhone } from "../../lib/common";
 import { cache } from '../../lib/cache';
+import { secrets } from '../../lib/secrets';
 import { ServiceUnavailableError } from "../../lib/error";
 import type { CachedResponse } from "../../lib/constants";
 
-const EMAIL_VALIDATION_API_KEY = process.env.EMAIL_VALIDATION_API_KEY || '';
-const EMAIL_VALIDATION_API_BASE = process.env.EMAIL_VALIDATION_API_BASE || '';
-const PHONE_VALIDATION_API_KEY = process.env.PHONE_VALIDATION_API_KEY || '';
-const PHONE_VALIDATION_API_BASE = process.env.PHONE_VALIDATION_API_BASE || '';
+const DEV = process.env.NODE_ENV !== 'production';
+
+const EMAIL_VALIDATION_API_KEY = !DEV && Object.keys(secrets).length ? secrets.EMAIL_VALIDATION_API_KEY : import.meta.env.EMAIL_VALIDATION_API_KEY;
+const EMAIL_VALIDATION_API_BASE = !DEV ? process.env.EMAIL_VALIDATION_API_BASE : import.meta.env.EMAIL_VALIDATION_API_BASE;
+const PHONE_VALIDATION_API_KEY = !DEV && Object.keys(secrets).length ? secrets.PHONE_VALIDATION_API_KEY : import.meta.env.PHONE_VALIDATION_API_KEY;
+const PHONE_VALIDATION_API_BASE = !DEV ? process.env.PHONE_VALIDATION_API_BASE : import.meta.env.PHONE_VALIDATION_API_BASE;
 
 export const POST: APIRoute = async ({ request }) => {
     const form = await request.json();
