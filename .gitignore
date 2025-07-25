@@ -29,3 +29,6 @@ __MACOSX
 # figma
 *.sketch
 *.fig
+
+# amplify
+.amplify-hosting/

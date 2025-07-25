@@ -1,13 +1,15 @@
 import { createHash, randomUUID } from 'node:crypto';
-import ms from 'ms';
+import ms, { type StringValue } from 'ms';
 
 import { db, eq, Inventory, Products } from 'astro:db';
 import { useRedisAdapter, type RedisConfig } from "./adapter/redis";
 import { NAMESPACE, type CartItemListing, type CartItemRequest } from "./constants";
 import type { Cart } from '../lib/constants';
 
+const DEV = process.env.NODE_ENV !== 'production';
+
 async function useEphemeralCart (redisConfig: RedisConfig, expiration = '6h') {
-    const INVENTORY_KEY = `${NAMESPACE}_${import.meta.env.DEV ? 'dev' : 'prod'}_inventory`;
+    const INVENTORY_KEY = `${NAMESPACE}_${DEV ? 'dev' : 'prod'}_inventory`;
 
     const _redis = useRedisAdapter(redisConfig);
 
@@ -38,7 +40,7 @@ async function useEphemeralCart (redisConfig: RedisConfig, expiration = '6h') {
 
             if (!key) {
                 uuid = randomUUID();
-                key = `${NAMESPACE}_${import.meta.env.DEV ? 'dev' : 'prod'}_cart#${createHash('sha256').update(uuid).digest().toString('hex')}`;
+                key = `${NAMESPACE}_${DEV ? 'dev' : 'prod'}_cart#${createHash('sha256').update(uuid).digest().toString('hex')}`;
                 cart = {};
             } else {
                 uuid = key;
@@ -49,7 +51,7 @@ async function useEphemeralCart (redisConfig: RedisConfig, expiration = '6h') {
                     cart = {};
                 }
 
-                key = `${NAMESPACE}_${import.meta.env.DEV ? 'dev' : 'prod'}_cart#${createHash('sha256').update(uuid).digest().toString('hex')}`;
+                key = `${NAMESPACE}_${DEV ? 'dev' : 'prod'}_cart#${createHash('sha256').update(uuid).digest().toString('hex')}`;
             }
 
             if (cart[item.slug] && ((item.quantity + cart[item.slug].quantity) > knownInventory[item.slug].quantity)) {
@@ -63,7 +65,7 @@ async function useEphemeralCart (redisConfig: RedisConfig, expiration = '6h') {
                 price: (knownInventory[item.slug] as CartItemListing).price
             });
             
-            await _redis.setex(key, ms(expiration), JSON.stringify(cart));
+            await _redis.setex(key, ms(expiration as StringValue), JSON.stringify(cart));
 
             return Object.freeze({ key: uuid });
         },
@@ -73,7 +75,7 @@ async function useEphemeralCart (redisConfig: RedisConfig, expiration = '6h') {
             }
 
             let cart: Cart | null = await _cart.getAll(key) as Cart;
-            key = `${NAMESPACE}_${import.meta.env.DEV ? 'dev' : 'prod'}_cart#${createHash('sha256').update(key).digest().toString('hex')}`;
+            key = `${NAMESPACE}_${DEV ? 'dev' : 'prod'}_cart#${createHash('sha256').update(key).digest().toString('hex')}`;
 
             if (!cart) { // key expired, start a new cart
                 throw new Error('Failed to find cart');
@@ -96,25 +98,25 @@ async function useEphemeralCart (redisConfig: RedisConfig, expiration = '6h') {
                 });
             }
             
-            await _redis.setex(key, ms(expiration), JSON.stringify(cart));
+            await _redis.setex(key, ms(expiration as StringValue), JSON.stringify(cart));
         },
         getAll: async (key: string) => {
-            key = `${NAMESPACE}_${import.meta.env.DEV ? 'dev' : 'prod'}_cart#${createHash('sha256').update(key).digest().toString('hex')}`;
+            key = `${NAMESPACE}_${DEV ? 'dev' : 'prod'}_cart#${createHash('sha256').update(key).digest().toString('hex')}`;
             const existingCart = await _redis.getex(key, {
-                ex: ms(expiration)
+                ex: ms(expiration as StringValue)
             });
             return existingCart;
         },
         clear: async (key: string) => {
-            key = `${NAMESPACE}_${import.meta.env.DEV ? 'dev' : 'prod'}_cart#${createHash('sha256').update(key).digest().toString('hex')}`;
-            await _redis.setex(key, ms(expiration), JSON.stringify({}));
+            key = `${NAMESPACE}_${DEV ? 'dev' : 'prod'}_cart#${createHash('sha256').update(key).digest().toString('hex')}`;
+            await _redis.setex(key, ms(expiration as StringValue), JSON.stringify({}));
         }
     });
     return _cart;
 }
 
 export const cart = await useEphemeralCart({
-    url: import.meta.env.UPSTASH_REDIS_REST_URL,
-    token: import.meta.env.UPSTASH_REDIS_REST_TOKEN
+    url: !DEV ? process.env.UPSTASH_REDIS_REST_URL : import.meta.env.UPSTASH_REDIS_REST_URL,
+    token: !DEV ? process.env.UPSTASH_REDIS_REST_TOKEN : import.meta.env.UPSTASH_REDIS_REST_TOKEN
 });
 

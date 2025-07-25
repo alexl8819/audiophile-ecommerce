@@ -1,24 +1,24 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, passthroughImageService } from 'astro/config';
 
-import sitemap from '@astrojs/sitemap';
+// import sitemap from '@astrojs/sitemap';
 
 import tailwind from '@astrojs/tailwind';
-
-import vercel from '@astrojs/vercel';
 
 import react from '@astrojs/react';
 
 import db from '@astrojs/db';
 
+import awsAmplify from 'astro-aws-amplify';
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [sitemap(), tailwind(), react(), db()],
-  adapter: vercel(),
+  integrations: [/*sitemap(),*/ tailwind(), react(), db()],
+  adapter: awsAmplify(),
   output: 'server',
   prefetch: true,
-  experimental: {
-      svg: true,
+  image: {
+      service: passthroughImageService()
   },
   security: {
       checkOrigin: false
