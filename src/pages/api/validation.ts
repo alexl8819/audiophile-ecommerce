@@ -12,6 +12,8 @@ const EMAIL_VALIDATION_API_BASE = !DEV ? process.env.EMAIL_VALIDATION_API_BASE :
 const PHONE_VALIDATION_API_KEY = !DEV && Object.keys(secrets).length ? secrets.PHONE_VALIDATION_API_KEY : import.meta.env.PHONE_VALIDATION_API_KEY;
 const PHONE_VALIDATION_API_BASE = !DEV ? process.env.PHONE_VALIDATION_API_BASE : import.meta.env.PHONE_VALIDATION_API_BASE;
 
+console.log(Object.keys(secrets))
+
 export const POST: APIRoute = async ({ request }) => {
     const form = await request.json();
 
