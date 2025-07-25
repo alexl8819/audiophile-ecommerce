@@ -22,12 +22,7 @@ frontend:
         - "echo UPSTASH_REDIS_REST_TOKEN=$UPSTASH_REDIS_REST_TOKEN >> .env"
         - "echo EMAIL_VALIDATION_API_BASE=$EMAIL_VALIDATION_API_BASE >> .env"
         - "echo PHONE_VALIDATION_API_BASE=$PHONE_VALIDATION_API_BASE >> .env"
-        # unsafe: the following need to be real "secrets", not just stored as "secrets"
-        #- "echo STRIPE_SECRET_KEY=$STRIPE_SECRET_KEY >> .env"
-        #- "echo EMAIL_VALIDATION_API_KEY=$EMAIL_VALIDATION_API_KEY >> .env"
-        #- "echo PHONE_VALIDATION_API_KEY=$PHONE_VALIDATION_API_KEY >> .env"
         - "mv .env ./.amplify-hosting/compute/default"
-        - "du -sh ./.amplify-hosting/compute/default/node_modules/*"
   artifacts:
     baseDirectory: .amplify-hosting
     files:

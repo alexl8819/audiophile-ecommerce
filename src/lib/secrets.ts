@@ -8,8 +8,6 @@ const DEV = process.env.NODE_ENV !== 'production';
 async function decryptSecrets (secretId: string, region = 'us-east-1') {
     const client = new SecretsManagerClient({ region });
 
-    console.log('called');
-
     let response;
 
     try {
