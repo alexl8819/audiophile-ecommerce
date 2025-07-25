@@ -13,6 +13,7 @@ frontend:
         - "rm -r node_modules/@typescript-eslint"
         - "rm -r node_modules/@shikijs"
         - "rm -r node_modules/@img"
+        - "rm -r node_modules/@vue"
         - "rm -r node_modules/astro-aws-amplify"
         - "mv node_modules ./.amplify-hosting/compute/default"
         - "echo NODE_ENV=$NODE_ENV >> .env"
